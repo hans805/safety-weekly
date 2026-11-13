@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline'; frame-src 'self'; img-src 'self' data:">
+<title>주간 안전보건 동향 리포트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  :root{--navy:#0f1e3d;--navy2:#1b2f5a;--line:#e3e7ef;--bg:#f4f6fa;--txt:#1a2233;--sub:#6b7489;--acc:#3d6bd8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Pretendard,sans-serif;background:var(--bg);color:var(--txt);height:100vh;display:flex;flex-direction:column}
+  header{background:linear-gradient(120deg,var(--navy),var(--navy2));color:#fff;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  header h1{font-size:18px;font-weight:700;letter-spacing:-.3px}
+  header p{font-size:12px;opacity:.7;margin-top:3px}
+  header a{color:#fff;font-size:13px;border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap}
+  main{flex:1;display:flex;min-height:0}
+  nav{width:270px;background:#fff;border-right:1px solid var(--line);overflow-y:auto;flex-shrink:0}
+  nav h2{font-size:12px;color:var(--sub);font-weight:600;padding:16px 18px 8px}
+  nav button{display:block;width:100%;text-align:left;border:0;background:none;padding:12px 18px;border-left:3px solid transparent;cursor:pointer;font:inherit;color:var(--txt)}
+  nav button:hover{background:var(--bg)}
+  nav button.on{border-left-color:var(--acc);background:#eef2fb}
+  nav b{display:block;font-size:14px}
+  nav small{display:block;font-size:12px;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  section{flex:1;min-width:0;display:flex}
+  iframe{flex:1;border:0;background:#fff}
+  .empty{white-space:pre-line;margin:auto;color:var(--sub);text-align:center;font-size:14px;line-height:1.7;padding:24px}
+  @media (max-width:760px){
+    main{flex-direction:column}
+    nav{width:100%;max-height:150px;border-right:0;border-bottom:1px solid var(--line);display:flex;overflow-x:auto;overflow-y:hidden}
+    nav h2{display:none}
+    nav button{width:auto;flex-shrink:0;border-left:0;border-bottom:3px solid transparent}
+    nav button.on{border-bottom-color:var(--acc)}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>주간 안전보건 동향 리포트</h1><p>고용노동부 · 안전보건공단 · 법령 · 안전 전문지 — 매주 월요일 자동 갱신</p></div>
+  <a id="open" href="latest.html" target="_blank" rel="noopener noreferrer">새 창으로 보기</a>
+</header>
+<main>
+  <nav id="list" aria-label="리포트 목록"><h2>발행 이력</h2></nav>
+  <section id="view"><div class="empty">리포트를 불러오는 중입니다…</div></section>
+</main>
+<script>
+(function () {
+  "use strict";
+  var list = document.getElementById("list");
+  var view = document.getElementById("view");
+  var openLink = document.getElementById("open");
+  var FILE_RE = /^\d{4}-\d{2}-\d{2}\.html$/;   // 허용 파일명만 사용 (경로 조작 방지)
+  var frame = null, buttons = [];
+
+  function showEmpty(msg) {
+    view.textContent = "";
+    var d = document.createElement("div");
+    d.className = "empty";
+    d.textContent = msg;
+    view.appendChild(d);
+  }
+
+  function select(item, btn) {
+    var src = "reports/" + item.file;
+    if (!frame) {
+      view.textContent = "";
+      frame = document.createElement("iframe");
+      frame.title = "주간 리포트";
+      frame.setAttribute("sandbox", "allow-popups allow-popups-to-escape-sandbox");
+      view.appendChild(frame);
+    }
+    frame.src = src;
+    openLink.href = src;
+    for (var i = 0; i < buttons.length; i++) buttons[i].classList.toggle("on", buttons[i] === btn);
+    history.replaceState(null, "", "#" + item.file.replace(".html", ""));
+  }
+
+  fetch("reports.json", { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (items) {
+      items = (Array.isArray(items) ? items : []).filter(function (i) {
+        return i && typeof i.file === "string" && FILE_RE.test(i.file);
+      });
+      if (!items.length) { showEmpty("아직 발행된 리포트가 없습니다.\n첫 자동 실행 후 표시됩니다."); return; }
+      var frag = document.createDocumentFragment();
+      items.forEach(function (item) {
+        var b = document.createElement("button");
+        var t = document.createElement("b");
+        var s = document.createElement("small");
+        t.textContent = String(item.date || item.file.slice(0, 10));
+        s.textContent = String(item.title || "");
+        b.appendChild(t); b.appendChild(s);
+        b.addEventListener("click", function () { select(item, b); });
+        buttons.push(b);
+        frag.appendChild(b);
+      });
+      list.appendChild(frag);
+      var want = location.hash.slice(1) + ".html";
+      var idx = 0;
+      for (var i = 0; i < items.length; i++) if (items[i].file === want) { idx = i; break; }
+      select(items[idx], buttons[idx]);
+    })
+    .catch(function () { showEmpty("목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요."); });
+})();
+</script>
+</body>
+</html>
