@@ -49,7 +49,7 @@
   var list = document.getElementById("list");
   var view = document.getElementById("view");
   var openLink = document.getElementById("open");
-  var FILE_RE = /^\d{4}-\d{2}-\d{2}\.html$/;   // 허용 파일명만 사용 (경로 조작 방지)
+  var FILE_RE = /^\d{4}-W\d{2}\.html$/;   // 허용 파일명만 사용 (경로 조작 방지)
   var frame = null, buttons = [];
 
   function showEmpty(msg) {
@@ -66,7 +66,7 @@
       view.textContent = "";
       frame = document.createElement("iframe");
       frame.title = "주간 리포트";
-      frame.setAttribute("sandbox", "allow-popups allow-popups-to-escape-sandbox");
+      frame.setAttribute("sandbox", "allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox");
       view.appendChild(frame);
     }
     frame.src = src;
@@ -87,7 +87,7 @@
         var b = document.createElement("button");
         var t = document.createElement("b");
         var s = document.createElement("small");
-        t.textContent = String(item.date || item.file.slice(0, 10));
+        t.textContent = String(item.id || item.file.slice(0, 8)) + (item.from ? "  " + String(item.from).slice(5).replace("-", ".") + "~" + String(item.to || "").slice(5).replace("-", ".") : "");
         s.textContent = String(item.title || "");
         b.appendChild(t); b.appendChild(s);
         b.addEventListener("click", function () { select(item, b); });

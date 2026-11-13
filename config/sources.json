@@ -1,0 +1,65 @@
+[
+ {
+  "id": "moel-policy",
+  "group": "고용노동부",
+  "name": "정책자료실",
+  "url": "https://www.moel.go.kr/policy/policydata/list.do",
+  "purpose": "안전보건 정책 방향이 반영된 공식 자료(산업재해 현황, 법령 개정 안내, 명예감독관 QnA 등)",
+  "mode": "summary",
+  "enabled": true
+ },
+ {
+  "id": "moel-notice",
+  "group": "고용노동부",
+  "name": "공지사항",
+  "url": "https://www.moel.go.kr/news/notice/noticeList.do",
+  "purpose": "중대산업재해 발생사실 공표, 입법·행정예고 등 사업장이 알아야 할 공식 안내",
+  "mode": "summary",
+  "enabled": true
+ },
+ {
+  "id": "moel-report",
+  "group": "고용노동부",
+  "name": "보도자료",
+  "url": "https://www.moel.go.kr/news/enews/report/enewsList.do",
+  "purpose": "기획감독 계획, 특별감독·감독 결과, 위반 적발 사례 등 규제 동향",
+  "mode": "summary",
+  "enabled": true
+ },
+ {
+  "id": "kosha-siren",
+  "group": "안전보건공단",
+  "name": "중대재해 사이렌",
+  "url": "https://portal.kosha.or.kr/archive/imprtnDsstrAlrame/CSADV50000/CSADV50000M01",
+  "purpose": "타 사업장 중대재해 개요·원인·예방대책을 점검 자료로 활용",
+  "mode": "summary",
+  "enabled": true
+ },
+ {
+  "id": "kosha-report",
+  "group": "안전보건공단",
+  "name": "재해조사보고서",
+  "url": "https://portal.kosha.or.kr/archive/disaster-case/disaster-report/all-industry",
+  "purpose": "중대재해의 기술·구조적 원인 분석으로 동종 사고 예방",
+  "mode": "summary",
+  "enabled": true
+ },
+ {
+  "id": "media-anjunj",
+  "group": "언론사",
+  "name": "안전저널",
+  "url": "https://www.anjunj.com/",
+  "purpose": "정책·사건사고·판결·글로벌 동향 (AI 학습·활용 금지 표기 매체)",
+  "mode": "linkOnly",
+  "enabled": true
+ },
+ {
+  "id": "media-safetynews",
+  "group": "언론사",
+  "name": "안전신문",
+  "url": "https://www.safetynews.co.kr/",
+  "purpose": "정책·사건사고·기술 트렌드·전문가 의견",
+  "mode": "summary",
+  "enabled": true
+ }
+]

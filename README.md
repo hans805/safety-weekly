@@ -7,8 +7,11 @@ GitHub Pages 사이트에 자동으로 게시합니다. 서버 비용 0원, Clau
 | 파일 | 역할 |
 |---|---|
 | `.github/workflows/weekly-report.yml` | 자동 실행 일정·순서 |
-| `prompt.md` | Claude에게 주는 조사·작성 지시문 (내용 수정은 여기서) |
-| `scripts/publish.py` | 리포트 게시, 목록 갱신, 보안 정책 삽입 |
+| `template.html` | 리포트 화면(대시보드) 원본 — 2026-W45 기획본 그대로 |
+| `config/sources.json` · `profile.json` | 수집 대상, 당사 위험 프로필 (수정하면 다음 실행부터 반영) |
+| `config/example-report.json` | Claude가 따라 쓰는 완성 예시(W45 데이터) |
+| `prompt.md` | 조사·등급 판정·작성 지시문 — Claude는 데이터(JSON)만 만듦 |
+| `scripts/publish.py` | 데이터 검증 → 템플릿에 삽입 → 사이트 게시 |
 | `docs/index.html` | 리포트 사이트 첫 화면 (발행 이력 + 최신 리포트) |
 | `platform-link.html` | 회사 AI 플랫폼에 한 번만 올리는 연결용 파일 |
 
