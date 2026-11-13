@@ -1,0 +1,86 @@
+name: 주간 안전보건 동향 리포트
+
+on:
+  schedule:
+    - cron: "0 22 * * 0"   # 매주 월요일 07:00 (한국시간) = 일요일 22:00 UTC
+  workflow_dispatch:        # 수동 실행 버튼 (테스트용)
+
+permissions:
+  contents: write   # 리포트 이력 커밋
+  pages: write      # GitHub Pages 배포
+  id-token: write   # Pages 배포 인증
+
+concurrency:
+  group: weekly-report
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Claude Code 설치
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: 리포트 생성 (Claude)
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          TZ: Asia/Seoul
+        run: |
+          set -euo pipefail
+          if [ -z "${CLAUDE_CODE_OAUTH_TOKEN}" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN 시크릿이 등록되지 않았습니다."; exit 1
+          fi
+          mkdir -p out
+          TODAY=$(date +%F)
+          FROM=$(date -d '7 days ago' +%F)
+          sed -e "s/{{TODAY}}/${TODAY}/g" -e "s/{{FROM}}/${FROM}/g" prompt.md > out/prompt.txt
+          cat out/prompt.txt | claude -p \
+            --allowedTools "WebSearch,WebFetch,Write,Read,Edit" \
+            --max-turns 80 \
+            --output-format text > out/claude.log 2>&1 || true
+          if [ ! -s out/report.html ]; then
+            echo "::error::report.html 이 생성되지 않았습니다. 아래 로그를 확인하세요."
+            tail -n 60 out/claude.log
+            exit 1
+          fi
+
+      - name: 리포트 게시 준비
+        env:
+          TZ: Asia/Seoul
+        run: python3 scripts/publish.py
+
+      - name: 리포트 이력 저장 (커밋)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git diff --cached --quiet || git commit -m "주간 리포트 $(TZ=Asia/Seoul date +%F)"
+          git push
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      - name: 실행 로그 보관
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-log
+          path: out/claude.log
+          retention-days: 14
+          if-no-files-found: ignore
