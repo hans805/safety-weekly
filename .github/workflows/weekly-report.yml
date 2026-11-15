@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 45
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -41,28 +41,15 @@ jobs:
             echo "::error::CLAUDE_CODE_OAUTH_TOKEN 시크릿이 등록되지 않았습니다."; exit 1
           fi
           mkdir -p out
-          DOW=$(date +%u)
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            # 정기 실행(월요일): 지난주 월~일
-            FROM=$(date -d "-$((DOW + 6)) days" +%F)
-            TO=$(date -d "${FROM} +6 days" +%F)
-          else
-            # 수동 실행(테스트): 이번 주 월요일 ~ 오늘
-            FROM=$(date -d "-$((DOW - 1)) days" +%F)
-            TO=$(date +%F)
-          fi
-          WEEK=$(date -d "${FROM}" +%G-W%V)
-          echo "WEEK=${WEEK}" >> "$GITHUB_ENV"
-          echo "FROM=${FROM}" >> "$GITHUB_ENV"
-          echo "TO=${TO}" >> "$GITHUB_ENV"
-          echo "보고 주차 ${WEEK} (${FROM} ~ ${TO})"
-          sed -e "s/{{FROM}}/${FROM}/g" -e "s/{{TO}}/${TO}/g" -e "s/{{WEEK}}/${WEEK}/g" prompt.md > out/prompt.txt
+          TODAY=$(date +%F)
+          FROM=$(date -d '7 days ago' +%F)
+          sed -e "s/{{TODAY}}/${TODAY}/g" -e "s/{{FROM}}/${FROM}/g" prompt.md > out/prompt.txt
           cat out/prompt.txt | claude -p \
             --allowedTools "WebSearch,WebFetch,Write,Read,Edit" \
-            --max-turns 150 \
+            --max-turns 80 \
             --output-format text > out/claude.log 2>&1 || true
-          if [ ! -s out/report.json ]; then
-            echo "::error::report.json 이 생성되지 않았습니다. 아래 로그를 확인하세요."
+          if [ ! -s out/report.html ]; then
+            echo "::error::report.html 이 생성되지 않았습니다. 아래 로그를 확인하세요."
             tail -n 60 out/claude.log
             exit 1
           fi
@@ -70,7 +57,7 @@ jobs:
       - name: 리포트 게시 준비
         env:
           TZ: Asia/Seoul
-        run: python3 scripts/publish.py "$WEEK" "$FROM" "$TO"
+        run: python3 scripts/publish.py
 
       - name: 리포트 이력 저장 (커밋)
         run: |
