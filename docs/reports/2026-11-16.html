@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net; img-src data:; base-uri 'none'; form-action 'none'">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주간 안전보건 동향 (2026-11-09~2026-11-16)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --navy:#0f1e3d;
+    --navy-light:#1c3063;
+    --accent:#c8102e;
+    --text:#1f2430;
+    --muted:#5b6475;
+    --line:#e5e8ee;
+    --bg:#f4f5f8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+    font-size:15px;
+  }
+  .wrap{
+    max-width:880px;
+    margin:0 auto;
+    padding:0 20px 60px;
+  }
+  header.hero{
+    background:linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color:#fff;
+    padding:48px 32px 36px;
+    margin-bottom:28px;
+  }
+  header.hero .eyebrow{
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#b9c3dd;
+    margin-bottom:10px;
+  }
+  header.hero h1{
+    font-size:28px;
+    margin:0 0 14px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header.hero .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    font-size:13px;
+    color:#cfd7ea;
+  }
+  header.hero .meta strong{
+    color:#fff;
+    font-weight:600;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 28px;
+    margin-bottom:22px;
+    box-shadow:0 1px 3px rgba(15,30,61,0.04);
+  }
+  .card h2{
+    font-size:18px;
+    margin:0 0 6px;
+    color:var(--navy);
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h2 .num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:24px;height:24px;
+    border-radius:6px;
+    background:var(--navy);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+  }
+  .card .sub{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-bottom:16px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--line);
+  }
+  .summary-list{
+    margin:0;
+    padding-left:0;
+    list-style:none;
+  }
+  .summary-list li{
+    position:relative;
+    padding-left:20px;
+    margin-bottom:10px;
+    font-size:14.5px;
+  }
+  .summary-list li::before{
+    content:"—";
+    position:absolute;
+    left:0;
+    color:var(--navy);
+    font-weight:700;
+  }
+  .item{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .item:last-child{
+    border-bottom:none;
+    padding-bottom:0;
+  }
+  .item .top-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:baseline;
+    margin-bottom:4px;
+  }
+  .date-badge{
+    font-size:12px;
+    font-weight:700;
+    color:var(--navy);
+    background:#eef1f8;
+    padding:2px 8px;
+    border-radius:5px;
+    white-space:nowrap;
+  }
+  .item .title{
+    font-weight:600;
+    font-size:14.5px;
+    color:var(--text);
+  }
+  .item .title a{
+    color:var(--text);
+    text-decoration:none;
+    border-bottom:1px solid var(--line);
+  }
+  .item .title a:hover{
+    color:var(--navy);
+    border-bottom-color:var(--navy);
+  }
+  .item .desc{
+    font-size:13.5px;
+    color:var(--muted);
+    margin-top:3px;
+  }
+  .item .src-row{
+    font-size:11.5px;
+    color:#8891a1;
+    margin-top:6px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .tag{
+    display:inline-block;
+    padding:1px 7px;
+    border-radius:4px;
+    font-size:11px;
+    font-weight:600;
+  }
+  .tag.direct{ background:#e6f0e9; color:#1f7a4d; }
+  .tag.search{ background:#fdf0e3; color:#a3650f; }
+  .tag.fail{ background:#fbe7e9; color:#a31d2e; }
+  .deadline{
+    color:var(--accent);
+    font-weight:700;
+  }
+  .note-box{
+    margin-top:10px;
+    font-size:12.5px;
+    color:var(--muted);
+    background:#f8f9fb;
+    border:1px dashed var(--line);
+    border-radius:8px;
+    padding:10px 14px;
+  }
+  .empty-note{
+    font-size:13.5px;
+    color:var(--muted);
+    padding:6px 0;
+  }
+  .checklist{
+    margin:0;
+    padding:0;
+    list-style:none;
+    counter-reset:chk;
+  }
+  .checklist li{
+    counter-increment:chk;
+    position:relative;
+    padding:12px 0 12px 38px;
+    border-bottom:1px solid var(--line);
+    font-size:14.5px;
+  }
+  .checklist li:last-child{ border-bottom:none; }
+  .checklist li::before{
+    content:counter(chk);
+    position:absolute;
+    left:0;
+    top:10px;
+    width:24px;height:24px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .checklist .label{
+    font-weight:700;
+    display:block;
+    margin-bottom:2px;
+  }
+  .checklist .why{
+    font-size:13px;
+    color:var(--muted);
+  }
+  table.collect{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  table.collect th, table.collect td{
+    border:1px solid var(--line);
+    padding:9px 10px;
+    text-align:left;
+    vertical-align:top;
+  }
+  table.collect th{
+    background:var(--navy);
+    color:#fff;
+    font-weight:600;
+    font-size:12.5px;
+  }
+  table.collect tr:nth-child(even) td{
+    background:#f9fafc;
+  }
+  footer{
+    text-align:center;
+    font-size:12px;
+    color:#9aa3b2;
+    padding:24px 0 10px;
+  }
+
+  @media (max-width:420px){
+    .wrap{ padding:0 12px 40px; }
+    header.hero{ padding:32px 18px 26px; }
+    header.hero h1{ font-size:21px; }
+    .card{ padding:18px 16px; }
+    .card h2{ font-size:16px; }
+    table.collect{ font-size:11.5px; }
+    table.collect th, table.collect td{ padding:6px 6px; }
+  }
+
+  @media print{
+    body{ background:#fff; }
+    header.hero{ background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .card{ box-shadow:none; border:1px solid #ccc; break-inside:avoid; }
+    .item{ break-inside:avoid; }
+    a{ color:inherit !important; text-decoration:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">WEEKLY SAFETY &amp; HEALTH BRIEFING</div>
+    <h1>주간 안전보건 동향 리포트</h1>
+    <div class="meta">
+      <span>대상 기간 <strong>2026-11-09 ~ 2026-11-16 (KST)</strong></span>
+      <span>생성일 <strong>2026-11-16</strong></span>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2><span class="num">1</span>이번 주 핵심 요약</h2>
+    <div class="sub">제조업 안전보건 담당자가 먼저 확인해야 할 흐름</div>
+    <ul class="summary-list">
+      <li>고용노동부가 폐기물처리업·금속가공제조업 등 중대재해 취약사업장을 불시점검해 소화설비 관리 미흡, 방호장치 미설치 상태의 기계 가동 등 위반사항을 적발했다(11.12).</li>
+      <li>11.15부터 익년 3.15까지 범정부 한파 특별대응기간이 시작되며, 한파 취약사업장 약 3만 개소를 대상으로 작업시간 조정 자율점검(11.17~30)이 진행된다.</li>
+      <li>산업안전보건법 시행령·시행규칙 개정안, 명예산업안전감독관 운영규정 개정안 등 입법·행정예고가 11.12~13 사이 동시에 게시됐다(본문에 의견제출기한 미기재, 첨부파일 확인 필요).</li>
+      <li>이번 주에도 끼임(제지업), 추락(시멘트 제조·조선소), 중량물 충격(선박부품 제조) 등 제조업 현장 사망사고가 이어졌다.</li>
+      <li>안전보건공단은 대·중소기업 '안전보건 상생협력사업'을 2027년부터 건설업 포함 전업종으로 확대한다고 밝혔다(참여사 사고사망만인율 개선 성과 발표).</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">2</span>법령·제도 변화</h2>
+    <div class="sub">국가법령정보센터(law.go.kr) 직접접속 실패 → 고용노동부 입법예고 게시판(moel.go.kr)으로 동일 공고 확인</div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-12</span>
+        <span class="title"><a href="https://www.moel.go.kr/info/lawinfo/lawmaking/view.do?bbs_seq=20261100363" target="_blank" rel="noopener noreferrer">「산업안전보건법 시행령」 일부개정령(안) 입법예고 (고용노동부공고 제2026-504호)</a></span>
+      </div>
+      <div class="desc">개정 이유·주요내용을 사전 공지하고 의견을 수렴하기 위한 입법예고. <span class="deadline">의견제출기한: 본문 미기재(첨부파일 HWPX/PDF 확인 필요)</span></div>
+      <div class="src-row"><span>고용노동부</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-12</span>
+        <span class="title"><a href="https://www.moel.go.kr/info/lawinfo/lawmaking/view.do?bbs_seq=20261100364" target="_blank" rel="noopener noreferrer">「산업안전보건법 시행규칙」 일부개정령(안) 입법예고 (고용노동부공고 제2026-505호)</a></span>
+      </div>
+      <div class="desc">시행규칙 개정 이유·주요내용 사전 공지 및 의견수렴. <span class="deadline">의견제출기한: 본문 미기재(첨부파일 확인 필요)</span></div>
+      <div class="src-row"><span>고용노동부</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-12</span>
+        <span class="title"><a href="https://www.moel.go.kr/info/lawinfo/lawmaking/view.do?bbs_seq=20261100373" target="_blank" rel="noopener noreferrer">산업안전보건업무 수수료 고시 일부개정안 행정예고 (고용노동부공고 제2026-512호)</a></span>
+      </div>
+      <div class="desc">산업안전보건 관련 업무 수수료 고시 개정에 대한 행정예고. <span class="deadline">의견제출기한: 본문 미기재(첨부파일 확인 필요)</span></div>
+      <div class="src-row"><span>고용노동부</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-13</span>
+        <span class="title"><a href="https://www.moel.go.kr/info/lawinfo/lawmaking/view.do?bbs_seq=20261100432" target="_blank" rel="noopener noreferrer">「명예산업안전감독관 운영규정」 일부개정안 행정예고 (고용노동부공고 제2026-502호)</a></span>
+      </div>
+      <div class="desc">산업안전보건법 시행령에 근거한 명예산업안전감독관 운영규정 개정에 대한 행정절차법 제46조 행정예고. <span class="deadline">의견제출기한: 본문 미기재(첨부파일 확인 필요)</span></div>
+      <div class="src-row"><span>고용노동부</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="title">중대재해처벌법(중대재해 처벌 등에 관한 법률) 관련</span>
+      </div>
+      <div class="empty-note">이번 주 해당 없음 — law.go.kr, 통합입법예고센터(lawmaking.go.kr), moel.go.kr에서 조사 기간 내 신규 입법예고·개정 게시물을 확인하지 못함.</div>
+    </div>
+
+    <div class="note-box">참고: 위 4건 모두 공고 본문에는 입법예고 취지만 명시되어 있고, 의견제출 마감일과 구체 개정 조문은 첨부파일(HWPX/PDF)에만 포함되어 있어 원문 열람으로는 확인하지 못했습니다. 의견제출이 필요한 경우 반드시 moel.go.kr 원문 링크에서 첨부파일을 내려받아 마감일을 확인하시기 바랍니다.</div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">3</span>정책·보도자료 (고용노동부)</h2>
+    <div class="sub">moel.go.kr 보도자료 게시판(enews) 직접접속으로 확인</div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-12</span>
+        <span class="title"><a href="https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20244" target="_blank" rel="noopener noreferrer">노동부 장관·전국 지방노동관서장, 중대재해 취약현장 일제 불시점검</a></span>
+      </div>
+      <div class="desc">김영훈 장관과 지방노동관서장이 폐기물처리업·금속가공제조업·중소규모 건설현장 등을 불시점검. 서울 중구 재활용처리장에서 소화설비 관리 미흡, 방호울 제거 상태의 압축기 가동, 안전대 미착용 등 위반사항 확인.</div>
+      <div class="src-row"><span>고용노동부</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-11</span>
+        <span class="title"><a href="https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20236" target="_blank" rel="noopener noreferrer">안전보건공단-인력공단, 외국인근로자 입국 전 VR 체험교육 사업 협력</a></span>
+      </div>
+      <div class="desc">한국산업안전보건공단과 한국산업인력공단이 외국인근로자 입국 전 VR 기반 안전교육 협력 협약 체결. 네팔 EPS센터부터 2년간 VR 기기 보급·현지 강사 양성 추진.</div>
+      <div class="src-row"><span>고용노동부</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-13</span>
+        <span class="title"><a href="https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20249" target="_blank" rel="noopener noreferrer">한파 대비 노동자 건강보호 대책 — 작업시간대 조정 집중 지도</a></span>
+      </div>
+      <div class="desc">범정부 한파 안전 대책기간(2026.11.15~2027.3.15)에 맞춰 한파 취약사업장 약 3만 개소를 대상으로 한랭질환 위험요인·휴게시설 설치 관리기준 자율점검(11.17~30) 운영.</div>
+      <div class="src-row"><span>고용노동부</span><span class="tag search">검색(제목·날짜 확인, 본문 재확인 필요)</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-13</span>
+        <span class="title"><a href="https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20254" target="_blank" rel="noopener noreferrer">초광역특구법 관련 원포인트 사회적 대화 제8차 실무협의체 개최</a></span>
+      </div>
+      <div class="desc">노사정이 초광역특구법 관련 정착지원·인력양성 방안과 산업안전보건 지원대책 등을 논의. 다음 회의는 11월 17일 예정.</div>
+      <div class="src-row"><span>고용노동부</span><span class="tag direct">직접접속</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">4</span>안전보건공단(KOSHA) 소식</h2>
+    <div class="sub">kosha.or.kr은 JS 렌더링 사이트라 WebFetch 직접접속이 모두 실패 — 전 항목 검색을 통한 2차 매체 교차확인으로 수집</div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-10</span>
+        <span class="title"><a href="https://www.ksw-news.com/news/articleView.html?idxno=3059552" target="_blank" rel="noopener noreferrer">한국산업안전보건공단-한국가스기술공사, 감사역량 강화 MOU 체결</a></span>
+      </div>
+      <div class="desc">대전 유성구 가스기술공사 본사에서 감사협력 협약 체결. 재해예방 관련 감사기법 공유, 인력교류, 교차감사, AI 기반 디지털 감사기법 교류 합의.</div>
+      <div class="src-row"><span>2차 보도(ksw-news)</span><span class="tag search">검색</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-10~12</span>
+        <span class="title"><a href="https://www.tournews21.com/news/articleView.html?idxno=148485" target="_blank" rel="noopener noreferrer">안전보건공단-노사발전재단, 베트남 진출기업 대상 안전보건·노무관리 워크숍</a></span>
+      </div>
+      <div class="desc">11.10 하노이, 11.12 호치민에서 진출기업 120명 대상 개최. 베트남 산업안전보건법 변화 대응전략 공유.</div>
+      <div class="src-row"><span>2차 보도(tournews21)</span><span class="tag search">검색</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-11</span>
+        <span class="title"><a href="https://view.asiae.co.kr/article/2026111115284990411" target="_blank" rel="noopener noreferrer">안전보건공단-인력공단, 외국인근로자 입국 전 VR 안전교육 추진</a></span>
+      </div>
+      <div class="desc">네팔 고용허가제센터부터 VR 교육기기 보급 시작, 2년 시범사업 후 확대 검토.</div>
+      <div class="src-row"><span>2차 보도(아시아경제)</span><span class="tag search">검색</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-11</span>
+        <span class="title"><a href="https://www.etoday.co.kr/news/view/2646742" target="_blank" rel="noopener noreferrer">'안전보건 상생협력' 사업 2027년 건설업 포함 전업종 확대</a></span>
+      </div>
+      <div class="desc">3년간 참여사 사고사망만인율 0.137%→0.128%, 사고재해율 0.193%→0.177% 개선. 삼성물산 건설부문 중상해 재해 전년대비 46% 감소. 100인 이상 기업·시공액 50억 이상 종합건설사는 12월 중 공단에 신청.</div>
+      <div class="src-row"><span>2차 보도(이투데이)</span><span class="tag search">검색</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-13</span>
+        <span class="title"><a href="https://www.safetynews.co.kr/news/articleView.html?idxno=251549" target="_blank" rel="noopener noreferrer">안전보건공단 충남지역본부, 보건관리자 안전보건포럼 개최</a></span>
+      </div>
+      <div class="desc">천안 한국기술교육대학교에서 보건관리자 등 200여명 참석. 화학물질 중독사례 기반 직업성 질병 예방대책 공유.</div>
+      <div class="src-row"><span>안전신문</span><span class="tag search">검색</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">마감 2026-11-10</span>
+        <span class="title">2026년 2차 안전동행 지원사업 수정 공고</span>
+      </div>
+      <div class="desc">50인 미만 제조업 등 사업주 대상 위험성평가·안전보건관리체계 구축 지원(최대 1억원, 비용의 40~50%), 예산 5억 2,436만원. <span class="deadline">신청마감 2026-11-10(화) 10:00</span> — 원문 1차 URL 미확보, 원문은 KOSHA 공고 포털에서 재확인 필요.</div>
+      <div class="src-row"><span>2차 매체(간접 확인)</span><span class="tag search">검색(불확실)</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">5</span>언론 주요 기사</h2>
+    <div class="sub">안전신문(safetynews.co.kr), 안전저널(anjunj.com) — 모두 직접접속으로 확인</div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-11</span>
+        <span class="title"><a href="https://www.safetynews.co.kr/news/articleView.html?idxno=251492" target="_blank" rel="noopener noreferrer">제지업계 잇단 사망사고… 안전대책은 헛구호였나</a></span>
+      </div>
+      <div class="desc">11.10 한솔제지 장항공장에서 협력사 직원이 종이 롤지에 끼여 사망. 2025.7, 2026.3에도 동종업계 사망사고 발생, 해당 사업장은 안전대상 수상 직후 대표가 중대재해처벌법 위반으로 검찰 송치된 상태였음.</div>
+      <div class="src-row"><span>안전신문</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-15</span>
+        <span class="title"><a href="https://www.safetynews.co.kr/news/articleView.html?idxno=251530" target="_blank" rel="noopener noreferrer">영월 시멘트 공장서 떨어진 안전난간에 맞은 노동자 사망</a></span>
+      </div>
+      <div class="desc">11.11 오전 2시 32분경 강원 영월 시멘트 제조 사업장에서 천장크레인 정비 중 해체된 안전난간이 추락, 아래 작업자를 가격해 사망.</div>
+      <div class="src-row"><span>안전신문</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-13</span>
+        <span class="title"><a href="https://www.safetynews.co.kr/news/articleView.html?idxno=251548" target="_blank" rel="noopener noreferrer">노동부, 한파 취약사업장 3만곳 집중관리… 새벽 작업시간 조정 지도</a></span>
+      </div>
+      <div class="desc">11.15~익년 3.15 한파 취약사업장 3만곳 집중관리, 건설·환경미화·농업 분야 약 600곳 현장 중점 점검. 최근 5년간 한랭질환 산재 27건 중 50인 미만 소규모 사업장이 63% 차지.</div>
+      <div class="src-row"><span>안전신문</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-16</span>
+        <span class="title"><a href="https://www.safetynews.co.kr/news/articleView.html?idxno=251576" target="_blank" rel="noopener noreferrer">환경미화 노동자 사상 사고 잇달아</a></span>
+      </div>
+      <div class="desc">환경미화 노동자 야간·새벽 작업(전체 근무시간의 91.7%) 중 음주운전 차량 등에 의한 사망사고 반복. 노조는 야간작업 예외조항 삭제 요구.</div>
+      <div class="src-row"><span>안전신문</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-15</span>
+        <span class="title"><a href="https://www.anjunj.com/news/articleView.html?idxno=50962" target="_blank" rel="noopener noreferrer">한국 노동감독관 사업장 방문, OECD 평균의 6분의 1 수준</a></span>
+      </div>
+      <div class="desc">한국 노동감독관 1인당 연간 사업장 방문횟수 14회로 OECD 평균(83회)의 약 6분의 1. 정부는 2028년까지 감독관 3,050명 증원 계획.</div>
+      <div class="src-row"><span>안전저널</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-16</span>
+        <span class="title"><a href="https://www.anjunj.com/news/articleView.html?idxno=50968" target="_blank" rel="noopener noreferrer">[11/13, 경남 거제시] 선박건조 사업장 비계 위에서 추락 사망</a></span>
+      </div>
+      <div class="desc">11.13 오후 6시 24분경 거제시 연초면 선박건조 사업장(제조업)에서 자재 인양작업 중 비계 위에서 약 5m 아래로 추락, 40대 태국 국적 작업자 사망.</div>
+      <div class="src-row"><span>안전저널</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-16</span>
+        <span class="title"><a href="https://www.anjunj.com/news/articleView.html?idxno=50967" target="_blank" rel="noopener noreferrer">[11/14, 경북 경주시] 선박부품 제조공장 천장크레인 고리에 맞아 사망</a></span>
+      </div>
+      <div class="desc">11.14 오전 9시 2분경 경주시 외동읍 선박부품 제조공장(제조업)에서 천장크레인 조작 중 7kg 크레인 고리에 작업자가 맞아 60대 남성 사망.</div>
+      <div class="src-row"><span>안전저널</span><span class="tag direct">직접접속</span></div>
+    </div>
+
+    <div class="item">
+      <div class="top-row">
+        <span class="date-badge">2026-11-13</span>
+        <span class="title"><a href="https://www.anjunj.com/news/articleView.html?idxno=50958" target="_blank" rel="noopener noreferrer">노동부, '중대재해 취약현장' 불시점검…소화설비 미흡 등 적발</a></span>
+      </div>
+      <div class="desc">겨울철 중대재해 취약 사업장 전국 불시점검. 서울 자원재활용처리장에서 가연물 과다적재 상태의 소화설비 관리 미흡, 방호울 미설치 기계 가동, 안전대 미착용 등 적발.</div>
+      <div class="src-row"><span>안전저널</span><span class="tag direct">직접접속</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">6</span>우리 사업장 체크포인트</h2>
+    <div class="sub">이번 주 동향을 바탕으로 제조업 사업장이 지금 확인할 항목</div>
+    <ul class="checklist">
+      <li>
+        <span class="label">겨울철 한파 대응 체계 점검</span>
+        <span class="why">11.15~익년 3.15 한파 특별대응기간 시작. 야외·냉동·물류 공정 등 한랭질환 위험작업의 휴게시설·방한용품·작업시간 조정 여부를 11.17~30 자율점검 기준에 맞춰 선제 확인.</span>
+      </li>
+      <li>
+        <span class="label">방호장치·소화설비 상시가동 여부 재확인</span>
+        <span class="why">고용노동부 불시점검에서 방호울 제거 상태의 기계 가동, 소화설비 관리 미흡이 다수 적발됨. 금속가공·압축·절단 설비의 방호덮개 체결 상태와 소화설비 접근성을 현장 순회점검.</span>
+      </li>
+      <li>
+        <span class="label">크레인·중량물 취급 작업 안전수칙 재점검</span>
+        <span class="why">영월 시멘트공장(안전난간 추락), 경주 선박부품공장(크레인 고리 충격) 등 중량물·크레인 관련 사망사고 발생. 정비 중 부품 낙하 방지, 크레인 작업반경 내 출입통제 절차 점검.</span>
+      </li>
+      <li>
+        <span class="label">고소작업(비계·지붕) 추락방지 설비 확인</span>
+        <span class="why">거제 조선소 비계 추락 사망 등 고소작업 추락사고 지속. 비계 안전난간·발판 결속 상태, 안전대 부착설비(고리) 작동 여부를 작업 전 반드시 확인.</span>
+      </li>
+      <li>
+        <span class="label">입법예고(시행령·시행규칙) 모니터링 및 지원사업 확인</span>
+        <span class="why">산업안전보건법 시행령·시행규칙 개정안이 입법예고 중(의견제출기한 미공개, 첨부파일 확인 필요). 50인 미만 사업장은 안전보건 상생협력사업(2027년 확대) 등 지원제도 신청 일정도 함께 확인.</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">7</span>수집 현황</h2>
+    <div class="sub">출처별 접속 방식과 수집 건수, 한계사항</div>
+    <table class="collect">
+      <thead>
+        <tr><th>출처</th><th>수집 방식</th><th>건수</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>고용노동부<br>(moel.go.kr)</td>
+          <td>직접접속 위주<br>(일부 검색 보완)</td>
+          <td>보도자료 4건<br>입법·행정예고 4건</td>
+          <td>입법예고 의견제출기한이 본문에 없고 첨부파일(HWPX/PDF)에만 존재해 미확인</td>
+        </tr>
+        <tr>
+          <td>한국산업안전보건공단<br>(kosha.or.kr)</td>
+          <td>검색<br>(직접접속 전량 실패)</td>
+          <td>6건</td>
+          <td>게시판이 JS 렌더링 기반이라 WebFetch로 빈 콘텐츠만 수신, 2차 매체 보도로 교차확인</td>
+        </tr>
+        <tr>
+          <td>국가법령정보센터<br>(law.go.kr)</td>
+          <td>직접접속 실패 →<br>moel.go.kr 경유 확인</td>
+          <td>4건(산안법 시행령·시행규칙 등, 고용노동부 보도자료와 중복 집계)</td>
+          <td>law.go.kr/lawmaking.go.kr 접속 오류. 중대재해처벌법 관련은 이번 주 해당 없음</td>
+        </tr>
+        <tr>
+          <td>안전신문<br>(safetynews.co.kr)</td>
+          <td>직접접속</td>
+          <td>7건</td>
+          <td>제조업 직결 사고(제지업 끼임, 시멘트공장 추락) 포함</td>
+        </tr>
+        <tr>
+          <td>안전저널<br>(anjunj.com)</td>
+          <td>직접접속</td>
+          <td>9건</td>
+          <td>산업재해 사망사고 속보 다수(제조업 2건: 거제 조선소, 경주 선박부품공장 포함)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-box">본 리포트는 각 사이트의 실제 접속·검색 결과에 근거해 작성되었으며, 원문에서 확인되지 않은 수치·일정(특히 입법예고 의견제출기한)은 추측하지 않고 "확인 불가"로 표기했습니다.</div>
+  </section>
+
+  <footer>주간 안전보건 동향 리포트 · 생성일 2026-11-16 · 대상 기간 2026-11-09 ~ 2026-11-16 (KST)</footer>
+
+</div>
+</body>
+</html>
