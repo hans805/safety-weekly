@@ -49,7 +49,7 @@
   var list = document.getElementById("list");
   var view = document.getElementById("view");
   var openLink = document.getElementById("open");
-  var FILE_RE = /^\d{4}-\d{2}-\d{2}\.html$/;   // 허용 파일명만 사용 (경로 조작 방지)
+  var FILE_RE = /^\d{4}-(W\d{2}|\d{2}-\d{2})\.html$/;   // 허용 파일명만 사용 (경로 조작 방지)
   var frame = null, buttons = [];
 
   function showEmpty(msg) {
@@ -66,7 +66,7 @@
       view.textContent = "";
       frame = document.createElement("iframe");
       frame.title = "주간 리포트";
-      frame.setAttribute("sandbox", "allow-popups allow-popups-to-escape-sandbox");
+      frame.setAttribute("sandbox", "allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox");
       view.appendChild(frame);
     }
     frame.src = src;
@@ -81,13 +81,20 @@
       items = (Array.isArray(items) ? items : []).filter(function (i) {
         return i && typeof i.file === "string" && FILE_RE.test(i.file);
       });
+      // 주차형(상세 대시보드) 리포트를 먼저, 그다음 날짜형(단순형) 리포트
+      var isWeek = function (i) { return /W\d{2}\.html$/.test(i.file); };
+      var key = function (i) { return String(i.id || i.date || i.file); };
+      items.sort(function (a, b) {
+        if (isWeek(a) !== isWeek(b)) return isWeek(a) ? -1 : 1;
+        return key(b) < key(a) ? -1 : key(b) > key(a) ? 1 : 0;
+      });
       if (!items.length) { showEmpty("아직 발행된 리포트가 없습니다.\n첫 자동 실행 후 표시됩니다."); return; }
       var frag = document.createDocumentFragment();
       items.forEach(function (item) {
         var b = document.createElement("button");
         var t = document.createElement("b");
         var s = document.createElement("small");
-        t.textContent = String(item.date || item.file.slice(0, 10));
+        t.textContent = String(item.id || item.date || item.file.slice(0, 10)) + (item.from ? "  " + String(item.from).slice(5).replace("-", ".") + "~" + String(item.to || "").slice(5).replace("-", ".") : "");
         s.textContent = String(item.title || "");
         b.appendChild(t); b.appendChild(s);
         b.addEventListener("click", function () { select(item, b); });
