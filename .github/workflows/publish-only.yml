@@ -1,0 +1,47 @@
+name: 사이트만 갱신 (직접 올린 리포트 게시)
+
+# docs/reports 에 HTML을 직접 올리면 자동 실행. Claude를 쓰지 않으므로 사용량 0.
+on:
+  push:
+    branches: [main]
+    paths: ["docs/reports/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: weekly-report
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 리포트 목록 갱신
+        run: python3 scripts/build_index.py
+
+      - name: 목록 저장 (커밋)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git diff --cached --quiet || git commit -m "리포트 목록 갱신"
+          git push
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
