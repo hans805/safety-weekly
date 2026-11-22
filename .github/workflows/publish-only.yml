@@ -4,7 +4,7 @@ name: 사이트만 갱신 (직접 올린 리포트 게시)
 on:
   push:
     branches: [main]
-    paths: ["docs/reports/**"]
+    paths: ["docs/reports/**", "docs/index.html"]
   workflow_dispatch:
 
 permissions:
@@ -17,12 +17,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -42,6 +39,17 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: 업로드 반영 대기
+        run: sleep 20
 
       - id: deploy
         uses: actions/deploy-pages@v4
