@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주간 안전보건 동향 리포트</title>
+<style>
+:root{
+  --bg:#f3f4f6;--panel:#ffffff;--ink:#141a22;--ink2:#3b4554;--mute:#6b7685;--line:#e3e6eb;--line2:#eef0f3;
+  --head:#121820;--head2:#1b2430;--accent:#2f6f8f;--accent-soft:#e6f0f5;
+  --crit:#c93c3c;--crit-soft:#fbeaea;--high:#d9772b;--high-soft:#fdf0e4;--mid:#b38f1d;--mid-soft:#faf5e2;
+  --ok:#2e8b57;--ok-soft:#e7f4ec;--r:10px;--sh:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Pretendard","Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+button,select,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+/* header */
+header.top{background:linear-gradient(180deg,var(--head),var(--head2));color:#fff;padding:22px 0 0}
+.top-row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+.brand small{display:block;color:#9fb0c3;font-size:12px;letter-spacing:.08em;font-weight:500}
+.brand h1{margin:2px 0 0;font-size:24px;font-weight:800;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;color:#c8d3df;font-size:13px}
+.meta .pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:4px 12px}
+.meta select{background:#0e141b;border:1px solid #33404f;color:#fff;border-radius:8px;padding:6px 10px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:500;transition:background .15s,border-color .15s}
+.btn:hover{border-color:#c4cad3;background:#fafbfc}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.primary:hover{background:#285f7b}
+.btn.ghost-dark{background:transparent;color:#fff;border-color:#3b4858}.btn.ghost-dark:hover{background:rgba(255,255,255,.06)}
+.btn.sm{padding:4px 10px;font-size:12px;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+nav.tabs{display:flex;gap:4px;margin-top:18px}
+nav.tabs button{background:transparent;border:0;color:#9fb0c3;padding:10px 16px;border-radius:8px 8px 0 0;cursor:pointer;font-weight:500}
+nav.tabs button[aria-selected="true"]{background:var(--bg);color:var(--ink);font-weight:700}
+main{padding:22px 0 60px}
+.view[hidden]{display:none}
+/* panels */
+.grid{display:grid;gap:16px}
+.g-2{grid-template-columns:1.6fr 1fr}.g-3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:980px){.g-2,.g-3{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
+.panel h2{margin:0 0 12px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.panel h2 .sub{font-weight:400;color:var(--mute);font-size:12px}
+.sec-title{margin:28px 0 12px;font-size:17px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+.sec-title .cnt{font-size:12px;font-weight:500;color:var(--mute)}
+.bar-accent{width:4px;height:18px;border-radius:2px;background:var(--accent)}
+/* summary */
+.sum-list{margin:0;padding:0;list-style:none;counter-reset:s}
+.sum-list li{counter-increment:s;position:relative;padding:8px 0 8px 32px;border-bottom:1px dashed var(--line2)}
+.sum-list li:last-child{border-bottom:0}
+.sum-list li::before{content:counter(s);position:absolute;left:0;top:9px;width:22px;height:22px;border-radius:6px;background:var(--head);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
+.todo{list-style:none;margin:0;padding:0}
+.todo li{display:flex;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:#fcfcfd}
+.todo .no{flex:none;width:24px;height:24px;border-radius:50%;background:var(--crit);color:#fff;font-weight:700;font-size:12px;display:grid;place-items:center}
+.todo .who{font-size:12px;color:var(--mute);margin-top:2px}
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-top:16px}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:620px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--k,var(--accent))}
+.kpi .lb{font-size:12px;color:var(--mute);font-weight:500}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-top:4px}
+.kpi .v small{font-size:13px;font-weight:500;color:var(--mute);margin-left:2px}
+.kpi .d{font-size:11.5px;color:var(--mute);margin-top:2px}
+/* bars */
+.stack{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line2)}
+.stack span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:12px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.hbar{display:grid;grid-template-columns:96px 1fr 28px;gap:8px;align-items:center;font-size:12.5px;margin:7px 0}
+.hbar .t{height:10px;border-radius:5px;background:var(--line2);overflow:hidden}
+.hbar .t span{display:block;height:100%;border-radius:5px;background:var(--accent)}
+.hbar .n{text-align:right;font-weight:700;color:var(--ink2)}
+.hbar .k{color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.tl-item{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:#fff;display:flex;gap:12px;align-items:center}
+.dday{flex:none;min-width:64px;text-align:center;border-radius:8px;padding:6px 8px;font-weight:800;font-size:15px;background:var(--accent-soft);color:var(--accent)}
+.dday.hot{background:var(--crit-soft);color:var(--crit)}.dday.warm{background:var(--high-soft);color:var(--high)}.dday.past{background:#eef0f3;color:var(--mute)}
+.tl-item .lbl{font-size:13px;font-weight:600;line-height:1.45}
+.tl-item .dt{font-size:12px;color:var(--mute)}
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chipbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer;font-size:12.5px;font-weight:500}
+.chipbtn[aria-pressed="true"]{background:var(--head);color:#fff;border-color:var(--head)}
+.filters select,.filters input{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:#fff;font-size:13px}
+.filters input{min-width:200px}
+/* cards */
+.cards{display:grid;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--g);border-radius:var(--r);box-shadow:var(--sh);padding:16px 20px}
+.card-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;border-radius:6px;padding:3px 9px;background:var(--gs);color:var(--g)}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--g)}
+.score{font-size:12px;color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+.score b{color:var(--ink)}
+.tag{font-size:11.5px;background:var(--line2);color:var(--ink2);border-radius:5px;padding:2px 8px}
+.card h3{margin:10px 0 4px;font-size:16px;line-height:1.45;letter-spacing:-.01em}
+.src{font-size:12.5px;color:var(--mute)}
+.card-b{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;margin-top:12px}
+@media (max-width:860px){.card-b{grid-template-columns:1fr}}
+.fld .fl{font-size:11.5px;font-weight:700;color:var(--mute);letter-spacing:.04em;margin-bottom:3px}
+.fld p{margin:0;color:var(--ink2)}
+.why{background:#f7f9fb;border-radius:8px;padding:10px 12px}
+.sites{display:flex;gap:6px;flex-wrap:wrap}
+.site{font-size:12px;border-radius:6px;padding:3px 9px;border:1px solid var(--line)}
+.site.y{background:var(--crit-soft);border-color:#f2c9c9;color:var(--crit);font-weight:700}
+.site.c{background:var(--mid-soft);border-color:#ecdfae;color:#8a6d10}
+.site.n{color:var(--mute)}
+.acts{grid-column:1/-1}
+.acts table{width:100%;border-collapse:collapse;font-size:13px}
+.acts td{border-top:1px solid var(--line2);padding:7px 6px;vertical-align:top}
+.acts td.o{color:var(--mute);white-space:nowrap;width:1%}
+.acts td.d{white-space:nowrap;width:1%;font-variant-numeric:tabular-nums;color:var(--ink2)}
+details.more{grid-column:1/-1;border-top:1px solid var(--line2);padding-top:8px}
+details.more summary{cursor:pointer;color:var(--mute);font-size:12.5px}
+details.more ul{margin:6px 0 0;padding-left:18px;font-size:13px}
+.empty{padding:30px;text-align:center;color:var(--mute);background:#fff;border:1px dashed var(--line);border-radius:var(--r)}
+/* tables */
+.tbl-wrap{overflow:auto;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--sh)}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{background:#f7f8fa;text-align:left;font-weight:700;color:var(--ink2);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0}
+table.t td{padding:9px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
+table.t tr:last-child td{border-bottom:0}
+table.t td.nw{white-space:nowrap}
+.rel{font-weight:700;font-size:12px;border-radius:5px;padding:2px 8px;display:inline-block}
+.rel.상{background:var(--crit-soft);color:var(--crit)}.rel.중{background:var(--mid-soft);color:#8a6d10}.rel.하{background:var(--line2);color:var(--mute)}
+.st{border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-size:12.5px;background:#fff}
+.st.done{background:var(--ok-soft);border-color:#bfe0cc;color:var(--ok)}.st.prog{background:var(--high-soft);border-color:#f3d2b3;color:var(--high)}
+.lo{font-size:11px;border-radius:4px;padding:1px 6px;background:#eef0f3;color:var(--mute);margin-left:6px}
+.note{font-size:12.5px;color:var(--mute)}
+.notice{background:var(--accent-soft);border:1px solid #c9dfe9;color:#24546c;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px}
+.notice.warn{background:var(--high-soft);border-color:#f3d2b3;color:#8a4a12}
+/* settings */
+.src-table input[type=text],.src-table input[type=url],.src-table textarea,.src-table select{width:100%;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:13px;background:#fff}
+.src-table textarea{resize:vertical;min-height:36px}
+.row-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;align-items:center}
+.status-msg{font-size:12.5px;color:var(--mute);margin-right:auto}
+.prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media (max-width:860px){.prof-grid{grid-template-columns:1fr}}
+.prof-grid textarea{width:100%;min-height:200px;border:1px solid var(--line);border-radius:8px;padding:10px;font-size:13px;line-height:1.7}
+.crit-table td:first-child{font-weight:700;white-space:nowrap}
+footer{color:var(--mute);font-size:12px;text-align:center;padding:20px 0 40px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media print{
+  header.top nav,.filters,.meta select,.meta .btn,#viewSources,#viewProfile,#viewGuide{display:none!important}
+  body{background:#fff;font-size:12px}.panel,.card,.kpi,.tbl-wrap{box-shadow:none}
+  .card{break-inside:avoid}header.top{background:#fff;color:#000;border-bottom:2px solid #000}
+  .brand small,.meta{color:#333}.meta .pill{border-color:#999;background:none}
+  @page{size:A4;margin:12mm}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand">
+        <small>WEEKLY EHS INTELLIGENCE</small>
+        <h1>주간 안전보건 동향 리포트</h1>
+      </div>
+      <div class="meta">
+        <span class="pill" id="mPeriod">—</span>
+        <span class="pill" id="mGen">—</span>
+        <label class="sr" for="weekSel">보고 주차 선택</label>
+        <select id="weekSel" aria-label="보고 주차"></select>
+        <button class="btn ghost-dark" id="btnDownload" type="button">HTML 다운로드</button>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-view="viewDash" type="button">대시보드</button>
+      <button role="tab" aria-selected="false" data-view="viewSources" type="button">수집 대상 관리</button>
+      <button role="tab" aria-selected="false" data-view="viewProfile" type="button">당사 위험 프로필</button>
+      <button role="tab" aria-selected="false" data-view="viewGuide" type="button">등급·작성 기준</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="view" id="viewDash">
+    <div class="grid g-2">
+      <div class="panel"><h2>이번 주 핵심 요약</h2><ol class="sum-list" id="sumList"></ol></div>
+      <div class="panel"><h2>이번 주 꼭 할 일 TOP 3</h2><ul class="todo" id="top3"></ul></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="grid g-3" style="margin-top:16px">
+      <div class="panel"><h2>등급 분포 <span class="sub">주요 이슈 기준</span></h2><div id="gradeChart"></div></div>
+      <div class="panel"><h2>출처별 수집 · 반영 <span class="sub">확인 건수 대비 리포트 반영</span></h2><div id="catChart"></div></div>
+      <div class="panel"><h2>중대재해 사이렌 <span class="sub">재해유형 · 업종</span></h2><div id="sirenChart"></div></div>
+    </div>
+
+    <h2 class="sec-title"><span class="bar-accent"></span>D-Day 일정 <span class="cnt">시행일 · 의견제출 마감</span></h2>
+    <div class="tl" id="timeline"></div>
+
+    <h2 class="sec-title"><span class="bar-accent"></span>주요 이슈 <span class="cnt" id="cardCount"></span></h2>
+    <div class="filters" id="filters">
+      <button class="chipbtn" data-g="전체" aria-pressed="true" type="button">전체</button>
+      <button class="chipbtn" data-g="긴급" aria-pressed="false" type="button">긴급</button>
+      <button class="chipbtn" data-g="중요" aria-pressed="false" type="button">중요</button>
+      <button class="chipbtn" data-g="중간" aria-pressed="false" type="button">중간</button>
+      <select id="fSite" aria-label="사업장"><option value="">전체 사업장</option></select>
+      <select id="fCat" aria-label="분야"><option value="">전체 분야</option></select>
+      <input id="fQ" type="search" placeholder="제목·내용 검색" aria-label="검색">
+    </div>
+    <div class="cards" id="cards"></div>
+
+    <h2 class="sec-title"><span class="bar-accent"></span>법령·고시 신·구 비교</h2>
+    <div class="tbl-wrap"><table class="t" id="lawTbl"><thead><tr><th>항목</th><th>현행(종전)</th><th>개정</th><th>시행</th></tr></thead><tbody></tbody></table></div>
+
+    <h2 class="sec-title"><span class="bar-accent"></span>중대재해 사이렌 상세 <span class="cnt" id="sirenCnt"></span></h2>
+    <div class="tbl-wrap"><table class="t" id="sirenTbl"><thead><tr><th>재해일</th><th>지역</th><th>업종</th><th>유형</th><th>개요</th><th>예방대책</th><th>당사 관련</th></tr></thead><tbody></tbody></table></div>
+
+    <h2 class="sec-title"><span class="bar-accent"></span>액션 트래커 <span class="cnt" id="actCnt"></span></h2>
+    <div id="actNotice"></div>
+    <div class="tbl-wrap"><table class="t" id="actTbl"><thead><tr><th>등급</th><th>조치 사항</th><th>담당</th><th>기한</th><th>상태</th></tr></thead><tbody></tbody></table></div>
+
+    <div class="grid g-2" style="margin-top:28px">
+      <div>
+        <h2 class="sec-title" style="margin-top:0"><span class="bar-accent"></span>언론 동향</h2>
+        <div class="tbl-wrap"><table class="t" id="mediaTbl"><thead><tr><th>매체</th><th>기사</th><th>메모</th></tr></thead><tbody></tbody></table></div>
+      </div>
+      <div>
+        <h2 class="sec-title" style="margin-top:0"><span class="bar-accent"></span>재해조사보고서 <span class="cnt">교육 참고 사례</span></h2>
+        <div class="tbl-wrap"><table class="t" id="rptTbl"><thead><tr><th>사고</th><th>유형</th><th>활용</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+
+    <h2 class="sec-title"><span class="bar-accent"></span>수집 로그</h2>
+    <div class="tbl-wrap"><table class="t" id="logTbl"><thead><tr><th>출처</th><th>확인 건수</th><th>반영</th><th>상태</th><th>비고</th></tr></thead><tbody></tbody></table></div>
+    <details style="margin-top:12px"><summary class="note" style="cursor:pointer">전체 수집 목록(분류 결과) 보기</summary>
+      <div class="tbl-wrap" style="margin-top:8px"><table class="t" id="colTbl"><thead><tr><th>출처</th><th>게시일</th><th>제목</th><th>분류</th></tr></thead><tbody></tbody></table></div>
+    </details>
+  </section>
+
+  <section class="view" id="viewSources" hidden>
+    <div class="notice" id="srcNotice" style="margin-top:4px">매주 월요일 자동 실행 시 이 목록을 읽어 수집합니다. 주소를 바꾸거나 출처를 추가·중지한 뒤 <b>저장</b>을 누르세요.</div>
+    <div class="tbl-wrap"><table class="t src-table" id="srcTbl">
+      <thead><tr><th style="width:42px">사용</th><th style="width:150px">구분</th><th style="width:190px">출처명</th><th>주소(URL)</th><th style="width:220px">수집 목적</th><th style="width:130px">수록 방식</th><th style="width:70px"></th></tr></thead>
+      <tbody></tbody></table></div>
+    <div class="row-actions">
+      <span class="status-msg" id="srcMsg"></span>
+      <button class="btn" id="srcAdd" type="button">+ 출처 추가</button>
+      <button class="btn" id="srcReset" type="button">기본값 복원</button>
+      <button class="btn primary" id="srcSave" type="button">저장</button>
+    </div>
+  </section>
+
+  <section class="view" id="viewProfile" hidden>
+    <div class="notice">'당사 관련' 판정과 사업장별 영향 표시는 이 프로필을 기준으로 합니다. 공정·설비가 바뀌면 수정해 주세요.</div>
+    <div class="prof-grid">
+      <div class="panel"><h2>주요 위험요인 <span class="sub">한 줄에 하나</span></h2><textarea id="profHaz" aria-label="주요 위험요인"></textarea></div>
+      <div class="panel"><h2>사업장 · 업종 정보 <span class="sub">한 줄에 하나</span></h2><textarea id="profSites" aria-label="사업장 정보"></textarea></div>
+    </div>
+    <div class="row-actions"><span class="status-msg" id="profMsg"></span><button class="btn primary" id="profSave" type="button">저장</button></div>
+  </section>
+
+  <section class="view" id="viewGuide" hidden>
+    <div class="panel">
+      <h2>등급 판정 기준 (10점 만점)</h2>
+      <div class="tbl-wrap"><table class="t crit-table"><thead><tr><th>항목</th><th>배점</th><th>판정 기준</th></tr></thead><tbody>
+        <tr><td>법적 구속력</td><td>0~3</td><td>법률·시행령·시행규칙 3, 고시·훈령·예규 2, 보도자료·합의·입법예고 1, 사고 사례·언론 0</td></tr>
+        <tr><td>시급성</td><td>0~3</td><td>이미 시행 또는 30일 이내 시행·마감 3, 90일 이내 또는 동종 위험 상존 2, 그 이후 1, 일정 없음 0</td></tr>
+        <tr><td>당사 관련성</td><td>0~3</td><td>당사 공정·설비·규모에 직접 해당 3, 일부 공정·협력업체 해당 2, 간접 1, 무관 0</td></tr>
+        <tr><td>파급도</td><td>0~1</td><td>감독 집중·반복 재해·업계 이슈화 1</td></tr>
+      </tbody></table></div>
+      <p class="note" style="margin-top:12px"><b style="color:var(--crit)">긴급</b> 8점 이상 · <b style="color:var(--high)">중요</b> 6~7점 · <b style="color:#8a6d10">중간</b> 5점 이하. 관련성 0점(당사 무관)은 카드로 만들지 않고 수집 목록에만 남깁니다.</p>
+      <h2 style="margin-top:20px">작성 원칙</h2>
+      <ul class="note" style="line-height:1.9;margin:0;padding-left:18px">
+        <li>고용노동부·공단 자료는 첨부 원문(hwpx·PDF)을 우선 확인하고, 확인하지 못한 내용은 '확인 필요'로 표시합니다.</li>
+        <li>언론 기사는 요약과 원문 링크만 싣고 본문을 옮기지 않습니다. 'AI 학습·활용 금지'를 밝힌 매체는 제목·링크만 수록합니다.</li>
+        <li>중대재해 사이렌은 신속 전파용 자료라 공식 통계로 쓰지 않습니다.</li>
+        <li>'해야 할 일'의 담당·기한은 초안입니다. 확정은 안전환경팀이 합니다.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<footer>자동 수집·분석 결과입니다. 법적 판단이 필요한 사항은 원문과 담당 부서 확인 후 적용하세요.</footer>
+
+<script type="application/json" id="report-data">{"id": "2026-W47", "period": {"from": "2026-11-16", "to": "2026-11-22"}, "generatedAt": "2026-11-23T11:18:40+09:00", "summary": ["노동부가 범정부 한파안전대책기간(2026.11.15.~2027.3.15.) 중 사전점검(11.23.~12.4.)과 집중점검(12.7.~18.)에 착수해 옥외작업 사업장의 한파안전 5대수칙 준수를 집중 확인합니다.", "서울 서대문구 중·소 건설현장 일제 패트롤 점검에서 추락방지조치·가설구조물 미흡이 다수 적발돼 일부 현장은 즉시 재감독·사법처리 대상이 되었습니다.", "안전신문이 서산·고양·성동·영덕 등 전국 반복 사다리 추락 사망사고에 따른 노동당국의 사고경보를 보도했으며, 당사 사다리·고소작업대 사용 공정과 직접 관련됩니다.", "안전보건공단이 2027년 대·중소기업 안전보건 상생협력사업 설명회(서울·광주)를 공고해 협력업체 안전관리 매칭 지원 참여를 검토할 시점입니다.", "안전보건공단 포털(중대재해 사이렌·재해조사보고서)은 이번 주도 스크립트 렌더링 페이지라 직접 수집이 불가해 사례 기반 점검자료는 확보하지 못했습니다."], "top3": [{"text": "전 사업장 사다리·휴대용 고소작업대 보유현황 긴급 전수점검(2m 이상 작업 시 안전대 착용, 아웃트리거 설치, 최상단·하단 디딤대 작업금지)", "owner": "안전보건그룹 · 각 사업장", "due": "2026-11-28"}, {"text": "자재 야외 적치장·지게차 외부 동선 등 옥외작업구역 한파안전 5대수칙(보온장구·따뜻한 쉼터·온수·작업시간 조정·119) 자체점검", "owner": "안전보건그룹 · 각 사업장", "due": "2026-11-28"}, {"text": "협력업체 설치·시운전 현장 추락방지조치 점검표 공유 및 안전보건 상생협력사업 설명회 참여 여부 검토", "owner": "셋업 부서장 · 구매", "due": "2026-12-05"}], "items": [{"id": "i1", "grade": "긴급", "score": {"law": 1, "urgency": 3, "relevance": 3, "impact": 1}, "categories": ["사고경보", "떨어짐", "고소작업"], "title": "노동당국, 사다리 작업 떨어짐 사고 경보 발령", "sourceName": "안전신문", "date": "2026-11-22", "url": "https://www.safetynews.co.kr/news/articleView.html?idxno=251681", "summary": "최근 전국 산업현장에서 사다리 작업 중 추락사고가 반복(서산 11월, 고양 11.10., 성동구 11.4., 영덕 10.26.)되자 노동당국이 사고경보를 발령함. 예방대책으로 안전모 턱끈 체결, 3.5m 이하 높이에서만 작업, 2m 이상 작업 시 안전대 착용, 사다리 최상단·최하단 디딤대 작업 금지, 견고한 고정 및 아웃트리거 설치, 동반 근로자 지지를 제시함.", "why": "장비 상부 작업·고소작업대·사다리 사용은 당사 핵심 위험요인(떨어짐)으로, 전국적으로 반복되는 사다리 추락 사망사고와 동일한 위험이 조립·시운전 현장에 상존합니다.", "impact": {"수원": "해당", "평택": "해당", "청주": "해당"}, "actions": [{"text": "전 사업장 사다리·휴대용 고소작업대 보유현황 전수조사 및 2m 이상 작업 시 안전대 착용·아웃트리거 설치 여부 긴급 점검", "owner": "안전보건그룹 · 각 사업장", "due": "2026-11-28"}, {"text": "사다리 최상단·최하단 디딤대 작업금지, 안전모 턱끈 체결 등 현장 교육 실시", "owner": "각 사업장 관리감독자", "due": "2026-11-28"}], "basis": "안전신문 기사(idxno=251681) 확인. 노동당국 사다리 작업 추락사고 경보(서산·고양·성동·영덕 등 반복사고). 원 발령 자료(KOSHA 등)는 포털 동적 페이지로 직접 확인 불가(확인 필요). 산업안전보건기준에 관한 규칙 제24조(안전모), 제99조(사다리식 통로) 등 관련.", "related": []}, {"id": "i2", "grade": "중요", "score": {"law": 1, "urgency": 3, "relevance": 2, "impact": 1}, "categories": ["감독 동향", "한파", "보건"], "title": "\"추위가 재해가 되기 전에\" 겨울철 한랭질환 예방 집중점검", "sourceName": "고용노동부 보도자료", "date": "2026-11-22", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20287", "summary": "범정부 한파안전대책기간(2026.11.15.~2027.3.15.) 중 건설현장·폐기물처리장 등 옥외작업 사업장을 대상으로 사전점검(11.23.~12.4.)과 집중점검(12.7.~18.)을 실시함. 한파안전 5대 기본수칙(보온장구·따뜻한 쉼터·물·작업시간대 조정·119 신고) 준수와 한파특보 발령 시 작업시간 조정 현황을 확인하며, 법 위반 사항은 즉시 과태료 부과 및 미이행 시 사법조치함.", "why": "당사 수원·평택·청주 사업장의 자재 야외 적치장과 지게차 외부 동선은 옥외작업으로 분류되어 한파안전 5대수칙 점검 대상입니다. 사전점검이 11.23.부터 시작되므로 즉시 자체점검이 필요합니다.", "impact": {"수원": "해당", "평택": "해당", "청주": "해당"}, "actions": [{"text": "자재 적치장·지게차 외부 동선 등 옥외작업구역 한파안전 5대수칙(보온장구·따뜻한 쉼터·온수·작업시간 조정·119) 이행 상태 자체점검", "owner": "안전보건그룹 · 각 사업장", "due": "2026-11-28"}, {"text": "한파특보 발령 시 옥외작업 시간대 조정 기준 사전 수립 및 전파", "owner": "각 사업장 관리감독자", "due": "2026-12-04"}], "basis": "고용노동부 보도자료(’26.11.22., news_seq=20287) 상세 페이지 확인. 범정부 한파안전대책기간 2026.11.15.~2027.3.15. 사전점검 11.23.~12.4., 집중점검 12.7.~18. 산업안전보건기준에 관한 규칙 상 한랭질환 예방조치(보온·휴게시설 등) 관련.", "related": []}, {"id": "i3", "grade": "중요", "score": {"law": 1, "urgency": 2, "relevance": 2, "impact": 1}, "categories": ["감독 동향", "떨어짐", "건설"], "title": "서울 서대문구 일대 중·소 건설현장 일제 패트롤 점검", "sourceName": "고용노동부 보도참고", "date": "2026-11-20", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20281", "summary": "서울 서대문구 소재 종교시설·근린생활시설 신축공사 등 중·소 건설현장을 대상으로 한파 대비 노동자 보호조치, 추락방지조치(작업발판·안전난간), 가설구조물 붕괴예방, 화재 대피경로를 패트롤 점검함. 불충분한 휴게시설, 단부 안전난간 미설치, 거푸집 해체구간 출입금지 미실시, 낙하물 방지망·비계 설치기준 미준수, 비상구 안내표지 미설치가 적발됐고 일부 재감독 대상 현장은 즉시 재감독·사법처리함.", "why": "당사는 건설업이 아니지만 설치·시운전 인력이 고객사 건설현장에 상시 출장하므로, 적발된 추락방지조치·가설구조물 미흡 항목은 협력업체 현장관리 체크리스트에 반영할 필요가 있습니다.", "impact": {"수원": "해당", "평택": "검토", "청주": "검토"}, "actions": [{"text": "고객사 설치·시운전 현장 파견 전, 추락방지조치(안전난간·작업발판)·가설구조물 점검표 확인 절차를 협력업체에 공유", "owner": "셋업 부서장 · 구매", "due": "2026-12-05"}, {"text": "협력업체 현장 비상구·대피경로 표지 부착 여부 확인 체크리스트에 반영", "owner": "안전보건그룹", "due": "2026-12-05"}], "basis": "고용노동부 보도참고자료(’26.11.20., news_seq=20281) 상세 페이지 확인. 적발 사례(단부 안전난간 미설치, 거푸집 해체구간 출입금지 미실시, 비상구 표지 미설치 등)는 산업안전보건기준에 관한 규칙(추락 방지, 통로) 위반에 해당.", "related": []}, {"id": "i4", "grade": "중간", "score": {"law": 1, "urgency": 2, "relevance": 2, "impact": 0}, "categories": ["지원사업", "협력업체", "상생협력"], "title": "2027년 대·중소기업 안전보건 상생협력사업 설명회 개최 안내", "sourceName": "고용노동부 공지사항", "date": "2026-11-17", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100622", "summary": "한국산업안전보건공단 주관으로 협력업체·지역 중소기업과 컨소시엄을 구성해 안전보건 상생협력활동을 희망하는 100인 이상 모기업(건설업 제외)과 매칭 지원 참여 희망 컨설팅 기관을 대상으로 서울·광주 2회 설명회를 개최함. 구체 일정은 첨부 PDF로만 안내됨.", "why": "당사는 상시근로자 50인 이상이며 다수 협력업체와 거래하므로, 모기업 자격으로 매칭 지원(안전보건 상생협력)에 참여하면 협력업체 안전관리 역량 강화 비용을 분담할 수 있습니다.", "impact": {"수원": "해당", "평택": "검토", "청주": "검토"}, "actions": [{"text": "협력업체 컨소시엄 구성 가능성 및 설명회(서울·광주) 참석 여부 검토", "owner": "안전보건그룹 · 구매", "due": "2026-11-28"}, {"text": "참여 결정 시 공단 안전사업부(052-703-0631~3)로 신청 절차 문의", "owner": "안전보건그룹", "due": "2026-12-05"}], "basis": "고용노동부 공지사항(’26.11.17., bbs_seq=20261100622) 상세 페이지 확인. 한국산업안전보건공단 주관, 100인 이상 모기업-협력업체·중소기업 컨소시엄 대상. 설명회 구체 일정(서울·광주)은 첨부 PDF로만 확인 가능(확인 필요).", "related": []}], "siren": [], "timeline": [{"date": "2026-11-23", "label": "겨울철 한랭질환 예방 사전점검 시작(~12.4.)", "kind": "감독", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20287"}, {"date": "2026-12-07", "label": "겨울철 한랭질환 예방 집중점검 시작(~12.18.)", "kind": "감독", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20287"}], "lawTable": [], "media": [{"outlet": "안전저널", "date": "2026-11-16", "title": "[11/12, 강원 강릉시] 굴착기 작업 중 굴러 떨어짐", "url": "https://www.anjunj.com/news/articleView.html?idxno=50971", "note": "", "linkOnly": true}, {"outlet": "안전저널", "date": "2026-11-17", "title": "완충 배터리 압착 실험서 잇단 발화...서울시, 유통·보관 안전기준 추진", "url": "https://www.anjunj.com/news/articleView.html?idxno=50975", "note": "", "linkOnly": true}, {"outlet": "안전저널", "date": "2026-11-18", "title": "\"안전계획 승인 없이 착공\"…서울서 25건 적발", "url": "https://www.anjunj.com/news/articleView.html?idxno=50979", "note": "", "linkOnly": true}, {"outlet": "안전저널", "date": "2026-11-19", "title": "\"중대재해 예방 강화\" 기아, 노동부·협력사 110곳과 '안전 공동선언'", "url": "https://www.anjunj.com/news/articleView.html?idxno=50984", "note": "", "linkOnly": true}, {"outlet": "안전저널", "date": "2026-11-19", "title": "호주, 내년 6월부터 벤젠 노출기준 0.2ppm으로 강화", "url": "https://www.anjunj.com/news/articleView.html?idxno=50987", "note": "", "linkOnly": true}, {"outlet": "안전저널", "date": "2026-11-20", "title": "안전장치 끌 수 있게 불법 개조…고소작업대 제조업체 적발", "url": "https://www.anjunj.com/news/articleView.html?idxno=50993", "note": "", "linkOnly": true}, {"outlet": "안전신문", "date": "2026-11-19", "title": "중소기업 안전문화 확산 방안 모색… 2026 산업안전상생 컨퍼런스 개최", "url": "https://www.safetynews.co.kr/news/articleView.html?idxno=251678", "note": "산업안전상생재단·중소기업중앙회 공동 개최, 제4회 안심일터 대상 시상(종합대상 ㈜유일정밀)", "linkOnly": false}], "reports": [], "sourceStatus": [{"name": "고용노동부 정책자료실", "count": 0, "relevant": 0, "status": "완료", "note": "목록 1쪽 확인, 11.16.~22. 게시물 없음(최근 게시 11.13.)"}, {"name": "고용노동부 공지사항", "count": 8, "relevant": 1, "status": "완료", "note": "목록 1쪽 확인(bbs_seq 20261100571~20261100622, 11.16.~17. 게시분), 11.23. 게시분 1건은 기간 밖 제외"}, {"name": "고용노동부 보도자료", "count": 14, "relevant": 2, "status": "완료", "note": "목록 1~2쪽 확인(news_seq 20273~20287, 11.18.~22. 게시분)"}, {"name": "안전보건공단 중대재해 사이렌", "count": 0, "relevant": 0, "status": "수집 실패(동적 페이지)", "note": "1회 시도, 스크립트 렌더링으로 목록 내용 미확인"}, {"name": "안전보건공단 재해조사보고서", "count": 0, "relevant": 0, "status": "수집 실패(동적 페이지)", "note": "1회 시도, 스크립트 렌더링으로 목록 내용 미확인"}, {"name": "안전저널", "count": 19, "relevant": 6, "status": "완료", "note": "linkOnly, 목록 1~2쪽 확인(idxno 50971~50997, 11.16.~20. 게시분)"}, {"name": "안전신문", "count": 2, "relevant": 2, "status": "완료", "note": "목록 페이지 확인(idxno 251678, 251681, 11.19.·22. 게시분). 목록 렌더링 노이즈로 일부 기사 날짜 표기가 불명확해 상세 페이지로 재확인함"}], "collected": [{"source": "보도자료", "date": "2026-11-22", "title": "\"추위가 재해가 되기 전에\" 겨울철 한랭질환 예방 집중점검", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20287", "use": "반영"}, {"source": "보도자료", "date": "2026-11-22", "title": "국가기술자격증 불법 대여, 정부 합동단속으로 뿌리 뽑는다", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20286", "use": "제외"}, {"source": "보도자료", "date": "2026-11-21", "title": "(참고)노동부 장관, 국가자격시험장 현장 살핀다", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20285", "use": "제외"}, {"source": "보도자료", "date": "2026-11-20", "title": "건설산업을 빚낸 기능인 38명 영예의 수상… 제17회 건설기능인의 날 기념식 개최", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20284", "use": "제외"}, {"source": "보도자료", "date": "2026-11-20", "title": "근로복지공단, 아이의 성장과 상생을 담은 직장어린이집 우수사례 33건 시상", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20283", "use": "제외"}, {"source": "보도자료", "date": "2026-11-20", "title": "우리 사회 따뜻한 혁신기업 12개사, 「올해의 사회적기업」 첫 선정", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20282", "use": "제외"}, {"source": "보도자료", "date": "2026-11-20", "title": "(참고) 서울 서대문구 일대 중·소 건설현장 일제 패트롤 점검", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20281", "use": "반영"}, {"source": "보도자료", "date": "2026-11-20", "title": "(참고) 모두의 성장으로 대전환을 위해 전 부처 역량 결집", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20280", "use": "제외"}, {"source": "보도자료", "date": "2026-11-20", "title": "딱딱한 정책은 이제 그만, 친근하게 만나는 청년고용정책", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20279", "use": "제외"}, {"source": "보도자료", "date": "2026-11-19", "title": "「국가자격제도 종합점검 및 대책수립 TF」 1차 회의 개최", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20278", "use": "제외"}, {"source": "보도자료", "date": "2026-11-19", "title": "노동시간 변화로 그리는 일터혁신", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20277", "use": "제외"}, {"source": "보도자료", "date": "2026-11-19", "title": "역량으로 평가하고, 채용과정은 투명하게! 2026년 '채용문화 우수기업 어워즈' 개최", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20276", "use": "제외"}, {"source": "보도자료", "date": "2026-11-19", "title": "노사발전재단, 한·일 실노동시간 단축 정책 심포지엄 개최", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20275", "use": "제외"}, {"source": "보도자료", "date": "2026-11-18", "title": "피지컬 인공지능(AI) 테스트베드 4곳 개소, 지역 기업에 개방", "url": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=20273", "use": "제외"}, {"source": "공지사항", "date": "2026-11-20", "title": "2027년도 「미래유망분야고졸인력양성사업」재진입 트랙 선정계획 공고", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100741", "use": "제외"}, {"source": "공지사항", "date": "2026-11-20", "title": "2027년 미래유망분야 고졸인력양성 신규 트랙 선정계획 공고", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100740", "use": "제외"}, {"source": "공지사항", "date": "2026-11-20", "title": "2026년도 사업주 위탁훈련(집체) 기관평가 계획 공고", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100714", "use": "제외"}, {"source": "공지사항", "date": "2026-11-18", "title": "민간자격 등록폐지", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100646", "use": "제외"}, {"source": "공지사항", "date": "2026-11-18", "title": "한국폴리텍대학 지역대학장 공개초빙 공고", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100638", "use": "제외"}, {"source": "공지사항", "date": "2026-11-17", "title": "2027년 대·중소기업 안전보건 상생협력사업 설명회 개최 안내", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100622", "use": "반영"}, {"source": "공지사항", "date": "2026-11-16", "title": "근로복지공단 별정직 본부장 모집공고(광주지역, 대구지역)", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100574", "use": "제외"}, {"source": "공지사항", "date": "2026-11-16", "title": "고용노동부 '26년 정규 제4차 정책연구과제 입찰 재공고", "url": "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20261100571", "use": "제외"}, {"source": "안전저널", "date": "2026-11-16", "title": "[11/12, 강원 강릉시] 굴착기 작업 중 굴러 떨어짐", "url": "https://www.anjunj.com/news/articleView.html?idxno=50971", "use": "반영"}, {"source": "안전저널", "date": "2026-11-16", "title": "[3분 안전뉴스] 저소득 산재노동자 돕는다 … '산재보상 대리인 제도' 내년 3월 시행", "url": "https://www.anjunj.com/news/articleView.html?idxno=50972", "use": "제외"}, {"source": "안전저널", "date": "2026-11-17", "title": "함께 열어가는 안전인 시대 -下-", "url": "https://www.anjunj.com/news/articleView.html?idxno=50973", "use": "제외"}, {"source": "안전저널", "date": "2026-11-17", "title": "완충 배터리 압착 실험서 잇단 발화...서울시, 유통·보관 안전기준 추진", "url": "https://www.anjunj.com/news/articleView.html?idxno=50975", "use": "반영"}, {"source": "안전저널", "date": "2026-11-17", "title": "3D프린터 사용한 교사의 육종암 발병, 공무상 재해로 인정", "url": "https://www.anjunj.com/news/articleView.html?idxno=50977", "use": "제외"}, {"source": "안전저널", "date": "2026-11-18", "title": "\"안전계획 승인 없이 착공\"…서울서 25건 적발", "url": "https://www.anjunj.com/news/articleView.html?idxno=50979", "use": "반영"}, {"source": "안전저널", "date": "2026-11-18", "title": "정부, AI·드론 활용해 국유재산 안전관리 고도화…\"전 사업장 확대\"", "url": "https://www.anjunj.com/news/articleView.html?idxno=50980", "use": "제외"}, {"source": "안전저널", "date": "2026-11-18", "title": "대한산업안전협회 대구지역본부, 영진사이버대와 '안전인재 양성' 협력", "url": "https://www.anjunj.com/news/articleView.html?idxno=50981", "use": "제외"}, {"source": "안전저널", "date": "2026-11-19", "title": "전기장판·전기난로 화재 5년간 2354건…37명 숨져", "url": "https://www.anjunj.com/news/articleView.html?idxno=50982", "use": "제외"}, {"source": "안전저널", "date": "2026-11-19", "title": "국토부, 건설사 12곳 안전관리 점검…추락 예방에 초점", "url": "https://www.anjunj.com/news/articleView.html?idxno=50983", "use": "제외"}, {"source": "안전저널", "date": "2026-11-19", "title": "\"중대재해 예방 강화\" 기아, 노동부·협력사 110곳과 '안전 공동선언'", "url": "https://www.anjunj.com/news/articleView.html?idxno=50984", "use": "반영"}, {"source": "안전저널", "date": "2026-11-19", "title": "지하철 노조 20일부터 안전운행 투쟁 돌입", "url": "https://www.anjunj.com/news/articleView.html?idxno=50985", "use": "제외"}, {"source": "안전저널", "date": "2026-11-19", "title": "호주, 내년 6월부터 벤젠 노출기준 0.2ppm으로 강화", "url": "https://www.anjunj.com/news/articleView.html?idxno=50987", "use": "반영"}, {"source": "안전저널", "date": "2026-11-19", "title": "⑨ 1987년, 한국산업안전공단이 창립되다", "url": "https://www.anjunj.com/news/articleView.html?idxno=50989", "use": "제외"}, {"source": "안전저널", "date": "2026-11-20", "title": "안전장치 끌 수 있게 불법 개조…고소작업대 제조업체 적발", "url": "https://www.anjunj.com/news/articleView.html?idxno=50993", "use": "반영"}, {"source": "안전저널", "date": "2026-11-20", "title": "부정행위 시 국가기술자격 최대 10년 응시 제한…정부, 제도 개선 추진", "url": "https://www.anjunj.com/news/articleView.html?idxno=50994", "use": "제외"}, {"source": "안전저널", "date": "2026-11-20", "title": "'근로복지공단 독립법' 입법 추진…\"역할·책임 명확히\"", "url": "https://www.anjunj.com/news/articleView.html?idxno=50995", "use": "제외"}, {"source": "안전저널", "date": "2026-11-20", "title": "안전운행 투쟁 나선 서울 지하철 노조", "url": "https://www.anjunj.com/news/articleView.html?idxno=50996", "use": "제외"}, {"source": "안전저널", "date": "2026-11-20", "title": "[임무상의 그림산책] 초저녁", "url": "https://www.anjunj.com/news/articleView.html?idxno=50997", "use": "제외"}, {"source": "안전신문", "date": "2026-11-19", "title": "중소기업 안전문화 확산 방안 모색… 2026 산업안전상생 컨퍼런스 개최", "url": "https://www.safetynews.co.kr/news/articleView.html?idxno=251678", "use": "반영"}, {"source": "안전신문", "date": "2026-11-22", "title": "노동당국, 사다리 작업 떨어짐 사고 경보 발령", "url": "https://www.safetynews.co.kr/news/articleView.html?idxno=251681", "use": "반영"}]}</script>
+<script type="application/json" id="sources-data">[{"id": "moel-policy", "group": "고용노동부", "name": "정책자료실", "url": "https://www.moel.go.kr/policy/policydata/list.do", "purpose": "안전보건 정책 방향이 반영된 공식 자료(산업재해 현황, 법령 개정 안내, 명예감독관 QnA 등)", "mode": "summary", "enabled": true}, {"id": "moel-notice", "group": "고용노동부", "name": "공지사항", "url": "https://www.moel.go.kr/news/notice/noticeList.do", "purpose": "중대산업재해 발생사실 공표, 입법·행정예고 등 사업장이 알아야 할 공식 안내", "mode": "summary", "enabled": true}, {"id": "moel-report", "group": "고용노동부", "name": "보도자료", "url": "https://www.moel.go.kr/news/enews/report/enewsList.do", "purpose": "기획감독 계획, 특별감독·감독 결과, 위반 적발 사례 등 규제 동향", "mode": "summary", "enabled": true}, {"id": "kosha-siren", "group": "안전보건공단", "name": "중대재해 사이렌", "url": "https://portal.kosha.or.kr/archive/imprtnDsstrAlrame/CSADV50000/CSADV50000M01", "purpose": "타 사업장 중대재해 개요·원인·예방대책을 점검 자료로 활용", "mode": "summary", "enabled": true}, {"id": "kosha-report", "group": "안전보건공단", "name": "재해조사보고서", "url": "https://portal.kosha.or.kr/archive/disaster-case/disaster-report/all-industry", "purpose": "중대재해의 기술·구조적 원인 분석으로 동종 사고 예방", "mode": "summary", "enabled": true}, {"id": "media-anjunj", "group": "언론사", "name": "안전저널", "url": "https://www.anjunj.com/", "purpose": "정책·사건사고·판결·글로벌 동향 (AI 학습·활용 금지 표기 매체)", "mode": "linkOnly", "enabled": true}, {"id": "media-safetynews", "group": "언론사", "name": "안전신문", "url": "https://www.safetynews.co.kr/", "purpose": "정책·사건사고·기술 트렌드·전문가 의견", "mode": "summary", "enabled": true}]</script>
+<script type="application/json" id="profile-data">{"hazards": ["전기: 2차전지 충방전(화성) 장비 시운전·시험 시 고전압·대전류, 활선 근접", "화재·폭발: 리튬이온 배터리 시험·보관 중 열폭주, 충방전 시험실", "중량물: 장비 프레임·모듈 조립, 크레인·호이스트 인양", "지게차: 자재·장비 입출고, 상하차, 보행자 동선 교차", "끼임: 자동화 설비 시운전·정비·조정 중 가동부 접근(LOTO)", "떨어짐: 장비 상부 작업, 고소작업대·사다리, 고객사 설치 현장", "도급: 설치·시운전·유지보수 협력업체, 고객사 현장 출장 작업", "용접·절단, 화학물질(세척제·접착제) 취급"], "sites": ["회사: 원익피앤이 (2차전지 제조·검사 장비, 전기차 충전기, 폐배터리 평가장비)", "사업장: 수원(본사), 평택, 청주", "규모: 상시근로자 50인 이상 → 위험성평가 과태료 2027.1.1. 적용", "업종: 전기 변환·제어 장치 / 산업용 장비 제조"]}</script>
+<script>
+(function(){
+"use strict";
+const PRISTINE = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+const $ = (s, r) => (r || document).querySelector(s);
+const readJSON = id => { try { return JSON.parse(document.getElementById(id).textContent); } catch (e) { return null; } };
+const DEFAULT_SOURCES = readJSON("sources-data") || [];
+const DEFAULT_PROFILE = readJSON("profile-data") || { hazards: [], sites: [] };
+const EMBED = readJSON("report-data");
+const GRADES = ["긴급", "중요", "중간"];
+const GCOL = { "긴급": ["var(--crit)", "var(--crit-soft)"], "중요": ["var(--high)", "var(--high-soft)"], "중간": ["var(--mid)", "var(--mid-soft)"] };
+const SITES = ["수원", "평택", "청주"];
+
+const S = { reports: EMBED ? [EMBED] : [], cur: EMBED, sources: DEFAULT_SOURCES.slice(), profile: DEFAULT_PROFILE,
+  actions: {}, actionsVer: null, db: null, filter: { g: "전체", site: "", cat: "", q: "" } };
+
+/* ---------- safe DOM helpers ---------- */
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  if (attrs) for (const k in attrs) {
+    const v = attrs[k]; if (v == null || v === false) continue;
+    if (k === "class") el.className = v; else if (k === "style") el.style.cssText = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v); else el.setAttribute(k, v === true ? "" : String(v));
+  }
+  for (const c of kids.flat()) { if (c == null || c === false) continue; el.append(c instanceof Node ? c : String(c)); }
+  return el;
+}
+function safeUrl(u) { try { const x = new URL(String(u)); return (x.protocol === "https:" || x.protocol === "http:") ? x.href : null; } catch (e) { return null; } }
+function link(text, url) { const u = safeUrl(url); return u ? h("a", { href: u, target: "_blank", rel: "noopener noreferrer" }, text) : h("span", null, text); }
+function fill(el, ...kids) { el.replaceChildren(...kids.flat().filter(k => k != null)); }
+function fmtD(s) { if (!s) return "—"; const p = String(s).split("-"); return p.length === 3 ? `${+p[1]}.${+p[2]}.` : s; }
+function sum(sc) { return sc ? (sc.law|0) + (sc.urgency|0) + (sc.relevance|0) + (sc.impact|0) : 0; }
+function todayKST() { const n = new Date(Date.now() + 9 * 3600e3); return Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()); }
+function dday(s) { const p = String(s).split("-").map(Number); if (p.length < 3) return null; return Math.round((Date.UTC(p[0], p[1]-1, p[2]) - todayKST()) / 864e5); }
+function grp(arr, f) { const m = new Map(); for (const x of arr) { const k = f(x); m.set(k, (m.get(k) || 0) + 1); } return [...m.entries()].sort((a, b) => b[1] - a[1]); }
+
+/* ---------- render: dashboard ---------- */
+function render() {
+  const R = S.cur;
+  if (!R) { fill($("#cards"), h("div", { class: "empty" }, "표시할 리포트가 없습니다.")); return; }
+  $("#mPeriod").textContent = `보고기간 ${R.period.from.replace(/-/g, ".")} ~ ${R.period.to.slice(5).replace("-", ".")}`;
+  const g = new Date(R.generatedAt);
+  $("#mGen").textContent = isNaN(g) ? "생성 —" : `생성 ${g.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}`;
+  fill($("#sumList"), (R.summary || []).map(t => h("li", null, t)));
+  fill($("#top3"), (R.top3 || []).map((t, i) => h("li", null, h("span", { class: "no" }, i + 1), h("div", null, h("div", null, t.text), h("div", { class: "who" }, `${t.owner || ""} · ~${fmtD(t.due)}`)))));
+  renderKpis(R); renderCharts(R); renderTimeline(R); renderFilterOpts(R); renderCards(); renderLaw(R); renderSiren(R); renderActions(); renderMedia(R); renderLog(R);
+}
+function renderKpis(R) {
+  const items = R.items || [], c = g => items.filter(i => i.grade === g).length;
+  const soon = (R.timeline || []).filter(t => { const d = dday(t.date); return d != null && d >= 0 && d <= 30; }).length;
+  const ours = items.filter(i => SITES.some(s => (i.impact || {})[s] === "해당")).length;
+  const sirenHi = (R.siren || []).filter(s => s.rel === "상").length;
+  const total = (R.sourceStatus || []).reduce((a, s) => a + (s.count | 0), 0);
+  const K = [
+    ["수집 게시물", total, "건", `${(R.sourceStatus || []).length}개 출처`, "var(--accent)"],
+    ["긴급", c("긴급"), "건", "즉시 조치", "var(--crit)"],
+    ["중요", c("중요"), "건", "2주 내 조치", "var(--high)"],
+    ["중간", c("중간"), "건", "검토·참고", "var(--mid)"],
+    ["30일 내 시행·마감", soon, "건", "D-Day 일정 참조", "var(--crit)"],
+    ["중대재해 사이렌", (R.siren || []).length, "건", `당사 관련 '상' ${sirenHi}건`, "var(--ink2)"],
+    ["당사 직접 해당", ours, "건", "3개 사업장 영향", "var(--accent)"]
+  ];
+  fill($("#kpis"), K.map(k => h("div", { class: "kpi", style: `--k:${k[4]}` }, h("div", { class: "lb" }, k[0]), h("div", { class: "v" }, k[1], h("small", null, k[2])), h("div", { class: "d" }, k[3]))));
+}
+function hbars(rows, color) {
+  const max = Math.max(1, ...rows.map(r => r[1]));
+  return rows.map(([k, n]) => h("div", { class: "hbar" }, h("span", { class: "k", title: k }, k), h("div", { class: "t" }, h("span", { style: `width:${(n / max * 100).toFixed(1)}%;background:${color || "var(--accent)"}` })), h("span", { class: "n" }, n)));
+}
+function renderCharts(R) {
+  const items = R.items || [], n = items.length || 1;
+  const st = h("div", { class: "stack", role: "img", "aria-label": "등급 분포" }, GRADES.map(g => { const c = items.filter(i => i.grade === g).length; return c ? h("span", { style: `width:${c / n * 100}%;background:${GCOL[g][0]}`, title: `${g} ${c}건` }) : null; }));
+  const lg = h("div", { class: "legend" }, GRADES.map(g => h("span", null, h("i", { style: `background:${GCOL[g][0]}` }), `${g} ${items.filter(i => i.grade === g).length}`)));
+  const avg = items.length ? (items.reduce((a, i) => a + sum(i.score), 0) / items.length).toFixed(1) : "0";
+  fill($("#gradeChart"), st, lg, h("div", { style: "margin-top:16px" }, hbars(GRADES.map(g => [g, items.filter(i => i.grade === g).length]), "var(--ink2)")), h("p", { class: "note", style: "margin:10px 0 0" }, `평균 점수 ${avg} / 10`));
+  const ss = R.sourceStatus || [], mx = Math.max(1, ...ss.map(s => s.count | 0));
+  fill($("#catChart"), ss.map(s => h("div", { class: "hbar", style: "grid-template-columns:118px 1fr 44px" }, h("span", { class: "k", title: s.name }, s.name.replace(/^고용노동부 |^안전보건공단 /, "")),
+    h("div", { class: "t", style: "position:relative" }, h("span", { style: `position:absolute;left:0;top:0;width:${((s.count|0) / mx * 100).toFixed(1)}%;background:#cfd8e3` }), h("span", { style: `position:absolute;left:0;top:0;width:${((s.relevant|0) / mx * 100).toFixed(1)}%` })),
+    h("span", { class: "n" }, `${s.relevant}/${s.count}`))),
+    h("div", { class: "legend" }, h("span", null, h("i", { style: "background:var(--accent)" }), "반영"), h("span", null, h("i", { style: "background:#cfd8e3" }), "확인")));
+  const sr = R.siren || [];
+  fill($("#sirenChart"), hbars(grp(sr, s => s.type), "var(--crit)"), h("div", { style: "height:10px" }), hbars(grp(sr, s => s.industry), "var(--ink2)"));
+}
+function renderTimeline(R) {
+  const tl = (R.timeline || []).slice().sort((a, b) => a.date.localeCompare(b.date));
+  fill($("#timeline"), tl.length ? tl.map(t => {
+    const d = dday(t.date), cls = d == null ? "" : d < 0 ? "past" : d <= 30 ? "hot" : d <= 90 ? "warm" : "";
+    const lab = d == null ? "—" : d === 0 ? "D-DAY" : d > 0 ? `D-${d}` : `D+${-d}`;
+    return h("div", { class: "tl-item" }, h("div", { class: "dday " + cls }, lab), h("div", null, h("div", { class: "lbl" }, link(t.label, t.url)), h("div", { class: "dt" }, `${t.date.replace(/-/g, ".")} · ${t.kind || ""}`)));
+  }) : h("div", { class: "empty" }, "이번 주 등록된 일정이 없습니다."));
+}
+function renderFilterOpts(R) {
+  const cats = [...new Set((R.items || []).flatMap(i => i.categories || []))].sort();
+  fill($("#fCat"), h("option", { value: "" }, "전체 분야"), cats.map(c => h("option", { value: c }, c)));
+  fill($("#fSite"), h("option", { value: "" }, "전체 사업장"), SITES.map(s => h("option", { value: s }, `${s} 해당`)));
+  $("#fCat").value = S.filter.cat; $("#fSite").value = S.filter.site;
+}
+function siteChip(s, v) { const c = v === "해당" ? "y" : v === "검토" ? "c" : "n"; return h("span", { class: "site " + c }, `${s} ${v || "—"}`); }
+function renderCards() {
+  const R = S.cur, f = S.filter, q = f.q.trim().toLowerCase();
+  const order = g => GRADES.indexOf(g);
+  const list = (R.items || []).filter(i => (f.g === "전체" || i.grade === f.g) && (!f.cat || (i.categories || []).includes(f.cat)) && (!f.site || (i.impact || {})[f.site] === "해당")
+      && (!q || [i.title, i.summary, i.why].join(" ").toLowerCase().includes(q)))
+    .sort((a, b) => order(a.grade) - order(b.grade) || sum(b.score) - sum(a.score));
+  $("#cardCount").textContent = `${list.length} / ${(R.items || []).length}건`;
+  fill($("#cards"), list.length ? list.map(i => {
+    const [c, cs] = GCOL[i.grade] || GCOL["중간"]; const sc = i.score || {};
+    return h("article", { class: "card", style: `--g:${c};--gs:${cs}` },
+      h("div", { class: "card-h" }, h("span", { class: "badge" }, h("span", { class: "dot" }), i.grade),
+        h("span", { class: "score", title: `법적 구속력 ${sc.law} · 시급성 ${sc.urgency} · 관련성 ${sc.relevance} · 파급 ${sc.impact}` }, h("b", null, sum(sc)), " / 10"),
+        (i.categories || []).map(t => h("span", { class: "tag" }, t))),
+      h("h3", null, i.title),
+      h("div", { class: "src" }, `${i.sourceName} · ${(i.date || "").replace(/-/g, ".")} · `, link("원문 보기", i.url)),
+      h("div", { class: "card-b" },
+        h("div", { class: "fld" }, h("div", { class: "fl" }, "요약"), h("p", null, i.summary)),
+        h("div", { class: "fld why" }, h("div", { class: "fl" }, "왜 중요한가"), h("p", null, i.why)),
+        h("div", { class: "fld" }, h("div", { class: "fl" }, "사업장 영향"), h("div", { class: "sites" }, SITES.map(s => siteChip(s, (i.impact || {})[s])))),
+        h("div", { class: "fld" }, h("div", { class: "fl" }, "점수 근거"), h("p", { class: "note" }, `법적 구속력 ${sc.law}/3 · 시급성 ${sc.urgency}/3 · 당사 관련성 ${sc.relevance}/3 · 파급도 ${sc.impact}/1`)),
+        h("div", { class: "fld acts" }, h("div", { class: "fl" }, "우리가 해야 할 일"),
+          h("table", null, h("tbody", null, (i.actions || []).map(a => h("tr", null, h("td", null, a.text), h("td", { class: "o" }, a.owner || ""), h("td", { class: "d" }, `~${fmtD(a.due)}`)))))),
+        h("details", { class: "more" }, h("summary", null, "근거 · 관련 기사"),
+          h("ul", null, h("li", null, i.basis || "—"), (i.related || []).map(r => h("li", null, `[${r.source}] `, link(r.title, r.url))))))
+    );
+  }) : h("div", { class: "empty" }, "조건에 맞는 이슈가 없습니다."));
+}
+function renderLaw(R) { fill($("#lawTbl tbody"), (R.lawTable || []).map(r => h("tr", null, h("td", { class: "nw" }, h("b", null, r.name)), h("td", null, r.before), h("td", null, r.after), h("td", { class: "nw" }, r.effective)))); }
+function renderSiren(R) {
+  const sr = (R.siren || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+  $("#sirenCnt").textContent = `${sr.length}건 · 출처 안전보건공단 산업안전포털`;
+  fill($("#sirenTbl tbody"), sr.map(s => h("tr", null, h("td", { class: "nw" }, s.date.slice(5).replace("-", ".")), h("td", { class: "nw" }, s.region), h("td", { class: "nw" }, s.industry), h("td", { class: "nw" }, s.type), h("td", null, s.desc), h("td", null, s.prevention), h("td", { class: "nw" }, h("span", { class: "rel " + s.rel }, s.rel)))));
+}
+/* ---------- actions (shared state) ---------- */
+function actionRows() { const R = S.cur, out = []; for (const i of (R.items || [])) (i.actions || []).forEach((a, k) => out.push({ key: `${i.id}-${k}`, grade: i.grade, ...a })); return out.sort((a, b) => GRADES.indexOf(a.grade) - GRADES.indexOf(b.grade) || String(a.due).localeCompare(String(b.due))); }
+function renderActions() {
+  const rows = actionRows(), st = S.actions;
+  const done = rows.filter(r => st[r.key] === "완료").length;
+  $("#actCnt").textContent = `${rows.length}건 · 완료 ${done}`;
+  fill($("#actNotice"), S.db ? null : h("div", { class: "notice warn" }, "상태 변경은 claude.ai에 게시된 페이지에서 저장됩니다. 내려받은 파일에서는 이 화면에서만 바뀝니다."));
+  fill($("#actTbl tbody"), rows.map(r => {
+    const v = st[r.key] || "미착수";
+    const sel = h("select", { class: "st " + (v === "완료" ? "done" : v === "진행" ? "prog" : ""), "aria-label": "상태" }, ["미착수", "진행", "완료"].map(o => h("option", { value: o }, o)));
+    sel.value = v; sel.addEventListener("change", () => setAction(r.key, sel.value));
+    const [c] = GCOL[r.grade];
+    return h("tr", null, h("td", { class: "nw" }, h("b", { style: `color:${c}` }, r.grade)), h("td", null, r.text), h("td", { class: "nw" }, r.owner || ""), h("td", { class: "nw" }, fmtD(r.due)), h("td", null, sel));
+  }));
+}
+let actTimer = null;
+function setAction(key, val) {
+  S.actions = { ...S.actions, [key]: val }; renderActions();
+  if (!S.db) return;
+  clearTimeout(actTimer);
+  actTimer = setTimeout(async () => {
+    try { await S.db.doc("actions/" + S.cur.id).set({ statuses: S.actions, updatedAt: new Date().toISOString() }); }
+    catch (e) { fill($("#actNotice"), h("div", { class: "notice warn" }, "상태를 저장하지 못했습니다(편집 권한 확인).")); }
+  }, 500);
+}
+function renderMedia(R) {
+  fill($("#mediaTbl tbody"), (R.media || []).map(m => h("tr", null, h("td", { class: "nw" }, m.outlet, m.date ? h("div", { class: "note" }, fmtD(m.date)) : null),
+    h("td", null, link(m.title, m.url), m.linkOnly ? h("span", { class: "lo", title: "AI 학습·활용 금지 매체: 제목·링크만 수록" }, "제목·링크만") : null), h("td", { class: "note" }, m.note || ""))));
+  fill($("#rptTbl tbody"), (R.reports || []).length ? R.reports.map(r => h("tr", null, h("td", null, h("b", null, r.title), h("div", { class: "note" }, `${r.industry} · 재해 ${r.date} · 게시 ${r.posted}`)), h("td", { class: "nw" }, r.type), h("td", { class: "note" }, r.why)))
+    : [h("tr", null, h("td", { colspan: 3, class: "note" }, "이번 주 신규 보고서 없음"))]);
+}
+function renderLog(R) {
+  fill($("#logTbl tbody"), (R.sourceStatus || []).map(s => h("tr", null, h("td", { class: "nw" }, h("b", null, s.name)), h("td", null, s.count), h("td", null, s.relevant), h("td", { class: "nw" }, s.status), h("td", { class: "note" }, s.note))));
+  fill($("#colTbl tbody"), (R.collected || []).map(c => h("tr", null, h("td", { class: "nw" }, c.source), h("td", { class: "nw" }, fmtD(c.date)), h("td", null, link(c.title, c.url)), h("td", { class: "nw" }, c.use))));
+}
+
+/* ---------- week selector ---------- */
+function renderWeekSel() {
+  const sel = $("#weekSel");
+  fill(sel, S.reports.map(r => h("option", { value: r.id }, `${r.id} (${fmtD(r.period.from)}~${fmtD(r.period.to)})`)));
+  if (S.cur) sel.value = S.cur.id;
+}
+$("#weekSel").addEventListener("change", e => { const r = S.reports.find(x => x.id === e.target.value); if (r) { S.cur = r; S.actions = {}; render(); loadActions(); } });
+
+/* ---------- filters ---------- */
+$("#filters").addEventListener("click", e => { const b = e.target.closest("[data-g]"); if (!b) return; S.filter.g = b.dataset.g; document.querySelectorAll("#filters [data-g]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderCards(); });
+$("#fSite").addEventListener("change", e => { S.filter.site = e.target.value; renderCards(); });
+$("#fCat").addEventListener("change", e => { S.filter.cat = e.target.value; renderCards(); });
+let qT = null; $("#fQ").addEventListener("input", e => { clearTimeout(qT); qT = setTimeout(() => { S.filter.q = e.target.value; renderCards(); }, 150); });
+
+/* ---------- tabs ---------- */
+document.querySelectorAll("nav.tabs [data-view]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("nav.tabs [data-view]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+  document.querySelectorAll(".view").forEach(v => { v.hidden = v.id !== b.dataset.view; });
+}));
+
+/* ---------- sources editor ---------- */
+const GROUPS = ["고용노동부", "안전보건공단", "언론사", "기타"];
+function renderSources() {
+  fill($("#srcTbl tbody"), S.sources.map((s, idx) => {
+    const en = h("input", { type: "checkbox", "aria-label": "사용" }); en.checked = s.enabled !== false; en.addEventListener("change", () => { s.enabled = en.checked; });
+    const gp = h("select", { "aria-label": "구분" }, GROUPS.map(g => h("option", { value: g }, g))); gp.value = GROUPS.includes(s.group) ? s.group : "기타"; gp.addEventListener("change", () => { s.group = gp.value; });
+    const nm = h("input", { type: "text", value: s.name || "", maxlength: 60, "aria-label": "출처명" }); nm.addEventListener("input", () => { s.name = nm.value; });
+    const u = h("input", { type: "url", value: s.url || "", maxlength: 500, "aria-label": "URL" }); u.addEventListener("input", () => { s.url = u.value.trim(); });
+    const linkOut = safeUrl(s.url) ? h("a", { href: safeUrl(s.url), target: "_blank", rel: "noopener noreferrer", class: "note" }, "열기 ↗") : null;
+    const pp = h("textarea", { maxlength: 300, "aria-label": "수집 목적" }); pp.value = s.purpose || ""; pp.addEventListener("input", () => { s.purpose = pp.value; });
+    const md = h("select", { "aria-label": "수록 방식" }, [["summary", "요약 + 링크"], ["linkOnly", "제목·링크만"]].map(([v, t]) => h("option", { value: v }, t))); md.value = s.mode === "linkOnly" ? "linkOnly" : "summary"; md.addEventListener("change", () => { s.mode = md.value; });
+    const del = h("button", { class: "btn sm", type: "button", "aria-label": "삭제" }, "삭제"); del.addEventListener("click", () => { S.sources.splice(idx, 1); renderSources(); });
+    return h("tr", null, h("td", null, en), h("td", null, gp), h("td", null, nm), h("td", null, u, linkOut), h("td", null, pp), h("td", null, md), h("td", null, del));
+  }));
+}
+$("#srcAdd").addEventListener("click", () => { S.sources.push({ id: "s" + Date.now().toString(36), group: "기타", name: "", url: "https://", purpose: "", mode: "summary", enabled: true }); renderSources(); });
+$("#srcReset").addEventListener("click", () => { S.sources = JSON.parse(JSON.stringify(DEFAULT_SOURCES)); renderSources(); $("#srcMsg").textContent = "기본값으로 되돌렸습니다. 저장을 눌러야 반영됩니다."; });
+$("#srcSave").addEventListener("click", async () => {
+  const bad = S.sources.filter(s => !s.name || !safeUrl(s.url) || !/^https?:/.test(s.url));
+  if (bad.length) { $("#srcMsg").textContent = `출처명 또는 주소가 올바르지 않은 행이 ${bad.length}개 있습니다(https:// 로 시작).`; return; }
+  const clean = S.sources.map(s => ({ id: String(s.id || ("s" + Math.random().toString(36).slice(2, 8))).slice(0, 40), group: s.group, name: String(s.name).slice(0, 60), url: safeUrl(s.url), purpose: String(s.purpose || "").slice(0, 300), mode: s.mode === "linkOnly" ? "linkOnly" : "summary", enabled: s.enabled !== false }));
+  if (!S.db) { $("#srcMsg").textContent = "이 파일에서는 저장할 수 없습니다. claude.ai의 리포트 페이지에서 저장하세요."; return; }
+  const b = $("#srcSave"); b.disabled = true; $("#srcMsg").textContent = "저장 중…";
+  try { await S.db.doc("config/sources").set({ list: clean, updatedAt: new Date().toISOString() }); S.sources = clean; $("#srcMsg").textContent = "저장했습니다. 다음 월요일 자동 실행부터 반영됩니다."; }
+  catch (e) { $("#srcMsg").textContent = "저장하지 못했습니다(편집 권한이 필요합니다)."; }
+  finally { b.disabled = false; }
+});
+
+/* ---------- profile ---------- */
+function renderProfile() { $("#profHaz").value = (S.profile.hazards || []).join("\n"); $("#profSites").value = (S.profile.sites || []).join("\n"); }
+$("#profSave").addEventListener("click", async () => {
+  const lines = el => el.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 60).map(x => x.slice(0, 200));
+  const p = { hazards: lines($("#profHaz")), sites: lines($("#profSites")) };
+  if (!S.db) { $("#profMsg").textContent = "이 파일에서는 저장할 수 없습니다. claude.ai의 리포트 페이지에서 저장하세요."; return; }
+  try { await S.db.doc("config/profile").set({ ...p, updatedAt: new Date().toISOString() }); S.profile = p; $("#profMsg").textContent = "저장했습니다."; }
+  catch (e) { $("#profMsg").textContent = "저장하지 못했습니다(편집 권한이 필요합니다)."; }
+});
+
+/* ---------- download ---------- */
+function buildSnapshot() {
+  const esc = o => JSON.stringify(o).replace(/</g, "\\u003c");
+  return PRISTINE
+    .replace(/(<script type="application\/json" id="report-data">)[\s\S]*?(<\/script>)/, (_, a, b) => a + esc(S.cur) + b)
+    .replace(/(<script type="application\/json" id="sources-data">)[\s\S]*?(<\/script>)/, (_, a, b) => a + esc(S.sources) + b)
+    .replace(/(<script type="application\/json" id="profile-data">)[\s\S]*?(<\/script>)/, (_, a, b) => a + esc(S.profile) + b);
+}
+$("#btnDownload").addEventListener("click", async () => {
+  const html = buildSnapshot(), filename = `안전보건_주간리포트_${S.cur ? S.cur.id : "report"}.html`;
+  const dl = window.claude && window.claude.use ? await window.claude.use("downloads").catch(() => null) : null;
+  if (dl) { try { await dl.save({ filename, data: html, mimeType: "text/html" }); return; } catch (e) { if (e && e.name === "AbortError") return; } }
+  try { const url = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" })); const a = h("a", { href: url, download: filename }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); } catch (e) {}
+});
+
+/* ---------- shared data (claude.ai page only) ---------- */
+async function loadActions() {
+  if (!S.db || !S.cur) return;
+  try { const d = await S.db.doc("actions/" + S.cur.id).get(); const data = d && (typeof d.data === "function" ? d.data() : d.data); S.actions = (data && data.statuses) || {}; renderActions(); } catch (e) {}
+}
+async function connect() {
+  if (!(window.claude && window.claude.use)) return;
+  let db = null; try { db = await window.claude.use("db"); } catch (e) { db = null; }
+  if (!db) { renderActions(); return; }
+  S.db = db;
+  const timer = setTimeout(() => { $("#srcMsg").textContent = "공유 설정을 불러오는 데 시간이 걸리고 있습니다."; }, 10000);
+  const val = d => d ? (typeof d.data === "function" ? d.data() : d.data) : null;
+  try {
+    const [src, prof] = await Promise.all([db.doc("config/sources").get().catch(() => null), db.doc("config/profile").get().catch(() => null)]);
+    const sv = val(src); if (sv && Array.isArray(sv.list) && sv.list.length) S.sources = sv.list;
+    const pv = val(prof); if (pv && Array.isArray(pv.hazards)) S.profile = pv;
+    const snap = await db.collection("reports").get().catch(() => null);
+    const docs = snap ? (snap.docs || snap) : [];
+    const list = []; for (const d of docs) { const v = val(d); if (v && v.id && v.period && Array.isArray(v.items)) list.push(v); }
+    if (list.length) {
+      const map = new Map(S.reports.map(r => [r.id, r])); for (const r of list) map.set(r.id, r);
+      S.reports = [...map.values()].sort((a, b) => b.id.localeCompare(a.id)); S.cur = S.reports[0];
+    }
+  } catch (e) { /* keep embedded */ }
+  clearTimeout(timer); if ($("#srcMsg").textContent.startsWith("공유")) $("#srcMsg").textContent = "";
+  renderWeekSel(); render(); renderSources(); renderProfile(); await loadActions();
+}
+
+renderWeekSel(); render(); renderSources(); renderProfile();
+connect();
+})();
+</script>
+</body>
+</html>
