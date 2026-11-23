@@ -128,7 +128,14 @@ table.t td.nw{white-space:nowrap}
 .rel{font-weight:700;font-size:12px;border-radius:5px;padding:2px 8px;display:inline-block}
 .rel.상{background:var(--crit-soft);color:var(--crit)}.rel.중{background:var(--mid-soft);color:#8a6d10}.rel.하{background:var(--line2);color:var(--mute)}
 .st{border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-size:12.5px;background:#fff}
-.st.done{background:var(--ok-soft);border-color:#bfe0cc;color:var(--ok)}.st.prog{background:var(--high-soft);border-color:#f3d2b3;color:var(--high)}
+.st.done{background:var(--ok-soft);border-color:#bfe0cc;color:var(--ok)}.st.prog{background:var(--accent-soft);border-color:#c9dfe9;color:var(--accent)}.st.todo{background:#fff;color:var(--ink2)}.st.na{background:var(--line2);color:var(--mute)}.st.unset{color:var(--mute)}
+.card .lead{margin:8px 0 0;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-f{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:10px;font-size:12.5px;color:var(--mute)}
+details.detail{margin-top:10px;border-top:1px solid var(--line2);padding-top:8px}
+details.detail>summary{cursor:pointer;color:var(--accent);font-size:12.5px;font-weight:600;list-style:none}
+details.detail>summary::-webkit-details-marker{display:none}
+details.detail>summary::before{content:"▸ "}details.detail[open]>summary::before{content:"▾ "}
+@media print{details.detail .card-b{display:none}}
 .lo{font-size:11px;border-radius:4px;padding:1px 6px;background:#eef0f3;color:var(--mute);margin-left:6px}
 .note{font-size:12.5px;color:var(--mute)}
 .notice{background:var(--accent-soft);border:1px solid #c9dfe9;color:#24546c;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px}
@@ -179,10 +186,7 @@ footer{color:var(--mute);font-size:12px;text-align:center;padding:20px 0 40px}
 
 <main class="wrap">
   <section class="view" id="viewDash">
-    <div class="grid g-2">
-      <div class="panel"><h2>이번 주 핵심 요약</h2><ol class="sum-list" id="sumList"></ol></div>
-      <div class="panel"><h2>이번 주 꼭 할 일 TOP 3</h2><ul class="todo" id="top3"></ul></div>
-    </div>
+    <div class="panel"><h2>이번 주 핵심 요약</h2><ol class="sum-list" id="sumList"></ol></div>
     <div class="kpis" id="kpis"></div>
 
     <div class="grid g-3" style="margin-top:16px">
@@ -325,7 +329,6 @@ function render() {
   const g = new Date(R.generatedAt);
   $("#mGen").textContent = isNaN(g) ? "생성 —" : `생성 ${g.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}`;
   fill($("#sumList"), (R.summary || []).map(t => h("li", null, t)));
-  fill($("#top3"), (R.top3 || []).map((t, i) => h("li", null, h("span", { class: "no" }, i + 1), h("div", null, h("div", null, t.text), h("div", { class: "who" }, `${t.owner || ""} · ~${fmtD(t.due)}`)))));
   renderKpis(R); renderCharts(R); renderTimeline(R); renderFilterOpts(R); renderCards(); renderLaw(R); renderSiren(R); renderActions(); renderMedia(R); renderLog(R);
 }
 function renderKpis(R) {
@@ -390,18 +393,19 @@ function renderCards() {
     return h("article", { class: "card", style: `--g:${c};--gs:${cs}` },
       h("div", { class: "card-h" }, h("span", { class: "badge" }, h("span", { class: "dot" }), i.grade),
         h("span", { class: "score", title: `법적 구속력 ${sc.law} · 시급성 ${sc.urgency} · 관련성 ${sc.relevance} · 파급 ${sc.impact}` }, h("b", null, sum(sc)), " / 10"),
-        (i.categories || []).map(t => h("span", { class: "tag" }, t))),
+        (i.categories || []).slice(0, 3).map(t => h("span", { class: "tag" }, t))),
       h("h3", null, i.title),
-      h("div", { class: "src" }, `${i.sourceName} · ${(i.date || "").replace(/-/g, ".")} · `, link("원문 보기", i.url)),
+      h("p", { class: "lead" }, i.why || i.summary),
+      h("div", { class: "card-f" }, h("div", { class: "sites" }, SITES.map(s => siteChip(s, (i.impact || {})[s]))),
+        h("span", null, `조치 ${(i.actions || []).length}건`), h("span", null, `${i.sourceName} · ${fmtD(i.date)} · `, link("원문", i.url))),
+      h("details", { class: "detail" }, h("summary", null, "상세 보기"),
       h("div", { class: "card-b" },
         h("div", { class: "fld" }, h("div", { class: "fl" }, "요약"), h("p", null, i.summary)),
-        h("div", { class: "fld why" }, h("div", { class: "fl" }, "왜 중요한가"), h("p", null, i.why)),
-        h("div", { class: "fld" }, h("div", { class: "fl" }, "사업장 영향"), h("div", { class: "sites" }, SITES.map(s => siteChip(s, (i.impact || {})[s])))),
         h("div", { class: "fld" }, h("div", { class: "fl" }, "점수 근거"), h("p", { class: "note" }, `법적 구속력 ${sc.law}/3 · 시급성 ${sc.urgency}/3 · 당사 관련성 ${sc.relevance}/3 · 파급도 ${sc.impact}/1`)),
         h("div", { class: "fld acts" }, h("div", { class: "fl" }, "우리가 해야 할 일"),
           h("table", null, h("tbody", null, (i.actions || []).map(a => h("tr", null, h("td", null, a.text), h("td", { class: "o" }, a.owner || ""), h("td", { class: "d" }, `~${fmtD(a.due)}`)))))),
         h("details", { class: "more" }, h("summary", null, "근거 · 관련 기사"),
-          h("ul", null, h("li", null, i.basis || "—"), (i.related || []).map(r => h("li", null, `[${r.source}] `, link(r.title, r.url))))))
+          h("ul", null, h("li", null, i.basis || "—"), (i.related || []).map(r => h("li", null, `[${r.source}] `, link(r.title, r.url)))))))
     );
   }) : h("div", { class: "empty" }, "조건에 맞는 이슈가 없습니다."));
 }
@@ -412,15 +416,17 @@ function renderSiren(R) {
   fill($("#sirenTbl tbody"), sr.map(s => h("tr", null, h("td", { class: "nw" }, s.date.slice(5).replace("-", ".")), h("td", { class: "nw" }, s.region), h("td", { class: "nw" }, s.industry), h("td", { class: "nw" }, s.type), h("td", null, s.desc), h("td", null, s.prevention), h("td", { class: "nw" }, h("span", { class: "rel " + s.rel }, s.rel)))));
 }
 /* ---------- actions (shared state) ---------- */
+const ST_OPTS = ["미착수", "진행", "완료", "해당 없음"];
+const ST_CLS = { "미착수": "todo", "진행": "prog", "완료": "done", "해당 없음": "na" };
 function actionRows() { const R = S.cur, out = []; for (const i of (R.items || [])) (i.actions || []).forEach((a, k) => out.push({ key: `${i.id}-${k}`, grade: i.grade, ...a })); return out.sort((a, b) => GRADES.indexOf(a.grade) - GRADES.indexOf(b.grade) || String(a.due).localeCompare(String(b.due))); }
 function renderActions() {
   const rows = actionRows(), st = S.actions;
-  const done = rows.filter(r => st[r.key] === "완료").length;
-  $("#actCnt").textContent = `${rows.length}건 · 완료 ${done}`;
+  const cnt = v => rows.filter(r => st[r.key] === v).length;
+  $("#actCnt").textContent = `${rows.length}건 · 완료 ${cnt("완료")} · 진행 ${cnt("진행")} · 해당 없음 ${cnt("해당 없음")}`;
   fill($("#actNotice"), S.db ? null : h("div", { class: "notice warn" }, "상태 변경은 claude.ai에 게시된 페이지에서 저장됩니다. 내려받은 파일에서는 이 화면에서만 바뀝니다."));
   fill($("#actTbl tbody"), rows.map(r => {
-    const v = st[r.key] || "미착수";
-    const sel = h("select", { class: "st " + (v === "완료" ? "done" : v === "진행" ? "prog" : ""), "aria-label": "상태" }, ["미착수", "진행", "완료"].map(o => h("option", { value: o }, o)));
+    const v = ST_OPTS.includes(st[r.key]) ? st[r.key] : "";
+    const sel = h("select", { class: "st " + (ST_CLS[v] || "unset"), "aria-label": "상태" }, h("option", { value: "" }, "상태 선택"), ST_OPTS.map(o => h("option", { value: o }, o)));
     sel.value = v; sel.addEventListener("change", () => setAction(r.key, sel.value));
     const [c] = GCOL[r.grade];
     return h("tr", null, h("td", { class: "nw" }, h("b", { style: `color:${c}` }, r.grade)), h("td", null, r.text), h("td", { class: "nw" }, r.owner || ""), h("td", { class: "nw" }, fmtD(r.due)), h("td", null, sel));
@@ -428,7 +434,8 @@ function renderActions() {
 }
 let actTimer = null;
 function setAction(key, val) {
-  S.actions = { ...S.actions, [key]: val }; renderActions();
+  const next = { ...S.actions }; if (ST_OPTS.includes(val)) next[key] = val; else delete next[key];
+  S.actions = next; renderActions();
   if (!S.db) return;
   clearTimeout(actTimer);
   actTimer = setTimeout(async () => {

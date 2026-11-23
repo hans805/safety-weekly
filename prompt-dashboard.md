@@ -27,12 +27,14 @@
 ## 3. 작성 원칙
 - 실제로 확인한 페이지에 근거한 내용만. 추측·창작 금지. url 은 실제 원문 주소.
 - 언론 기사는 요약과 링크만. linkOnly 매체는 media 에 linkOnly: true, note 는 빈 문자열.
-- top3·actions 의 owner·due 는 초안(담당 예: 안전보건그룹, 각 사업장, 생산·물류·셋업 부서장, 구매, 인사). due 는 YYYY-MM-DD.
+- actions 의 owner·due 는 초안(담당 예: 안전보건그룹, 각 사업장, 생산·물류·셋업 부서장, 구매, 인사). due 는 YYYY-MM-DD.
 - impact 는 수원·평택·청주 각각 "해당"/"검토"/"참고".
 - timeline: 앞으로의 시행일·의견제출 마감 등. lawTable: 이번 주 법령·고시 변경의 종전→개정 비교(없으면 []).
-- 해당 내용이 없으면 빈 배열. 한국어, 간결한 보고서 문체. summary 4~5개, items 는 많아도 8개 이내.
+- 해당 내용이 없으면 빈 배열. 한국어, 간결한 보고서 문체.
+- 분량: summary 4~5개(각 2문장 이내), items 8개 이내, 각 item 의 why 는 2문장 이내·summary 는 3~4문장, actions 는 2~4개.
+- top3 는 만들지 않는다(화면에서 쓰지 않음).
 
 ## 4. 출력
-- out/report.json 하나만 Write 로 저장한다. 최상위 키: id, period, generatedAt, summary, top3, items, siren, timeline, lawTable, media, reports, sourceStatus, collected
+- out/report.json 하나만 Write 로 저장한다. 최상위 키: id, period, generatedAt, summary, items, siren, timeline, lawTable, media, reports, sourceStatus, collected
 - id="{{WEEK}}", period={"from":"{{FROM}}","to":"{{TO}}"}
 - 순수 JSON. 저장 후 Read 로 한 번 확인하고 종료한다.
